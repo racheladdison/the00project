@@ -23,6 +23,7 @@
     <string name="title_activity_forum">cFood Home</string>
     <string name="title_activity_login">cFood Login</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_splash">Splash</string>
 
     <!-- Strings related to Settings -->
 

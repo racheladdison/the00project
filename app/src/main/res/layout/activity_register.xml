@@ -32,7 +32,7 @@
             android:id="@+id/toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_activity_login"
+            android:text="@string/title_activity_register"
             android:textColor="@android:color/white"
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
             android:layout_gravity="start" />
@@ -133,7 +133,8 @@
                 android:id="@+id/textView2"
                 android:layout_gravity="center_horizontal"
                 android:clickable="true"
-                android:paddingTop="10dp" />
+                android:paddingTop="10dp"
+                android:onClick="returnToLogin"/>
 
         </LinearLayout>
     </ScrollView>

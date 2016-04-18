@@ -3,6 +3,7 @@ package com.project.cfood;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -31,6 +32,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+//import com.amazonaws.mobile.AWSMobileClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +71,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //AWSMobileClient.initializeMobileClientIfNecessary(getApplicationContext());
         setContentView(R.layout.activity_login);
         //Declare Toolbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -94,16 +98,30 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        /*
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View view) {
-                attemptLogin();
+            public void onClick(View view){
+                toForum(this);
             }
         });
+        */
 
         mLoginFormView = findViewById(R.id.login_form);
     }
+
+    public void toRegister(View view) {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
+    }
+
+    public void toForum(View view) {
+        Intent intent = new Intent(this, Forum.class);
+        startActivity(intent);
+    }
+
 
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
@@ -214,12 +232,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@colorado.edu");
+        return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return ((password.length() > 4)&&password.contains("1"));
+        return ((password.length() > 4));
     }
 
     /**
