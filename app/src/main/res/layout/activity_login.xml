@@ -101,7 +101,8 @@
         android:background="@color/button_material_light"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        android:onClick="toForum"/>
 
     <Button
         android:layout_width="201dp"
@@ -113,7 +114,8 @@
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:layout_margin="8dp"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        android:onClick="toRegister"/>
 
     <TextView
         android:layout_width="wrap_content"
