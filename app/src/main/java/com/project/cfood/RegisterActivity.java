@@ -19,21 +19,17 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-//import com.amazonaws.mobile.AWSMobileClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +39,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class RegisterActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -71,8 +67,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //AWSMobileClient.initializeMobileClientIfNecessary(getApplicationContext());
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_register);
         //Declare Toolbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         //Set the use of custom toolbar
@@ -81,7 +76,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         // Get access to the custom title view
         TextView mTitle = (TextView) myToolbar.findViewById(R.id.toolbar_title);
-
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -98,31 +92,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        /*
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View view){
-                toForum(this);
+            public void onClick(View view) {
+                attemptLogin();
             }
         });
-        */
 
         mLoginFormView = findViewById(R.id.login_form);
     }
 
-    public void toRegister(View view) {
-        Intent intent = new Intent(this, RegisterActivity.class);
+    public void returnToLogin(View view) {
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
-
-    public void toForum(View view) {
-        Intent intent = new Intent(this, Forum.class);
-        startActivity(intent);
-    }
-
-
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
@@ -176,7 +160,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -237,7 +220,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return ((password.length() > 4));
+        return password.length() > 4;
     }
 
     /**
@@ -313,7 +296,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
+                new ArrayAdapter<>(RegisterActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);
