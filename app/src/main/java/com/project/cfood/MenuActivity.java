@@ -1,5 +1,6 @@
 package com.project.cfood;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -80,18 +81,19 @@ public class MenuActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_profile) {
+            // Handle the profile action
+            /* Intent intent = new Intent(this, Profile.class);
+             * startActivity(intent);
+             */
+        } else if (id == R.id.nav_forum_view) {
+            Intent intent = new Intent(this, Forum.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_map_view) {
+            Intent intent = new Intent(this, MapsActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_sign_out) {
+            // Handle the sign out action
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
