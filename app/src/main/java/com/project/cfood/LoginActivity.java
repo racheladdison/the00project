@@ -35,6 +35,12 @@ import android.widget.TextView;
 
 //import com.amazonaws.mobile.AWSMobileClient;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Scope;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,16 +104,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestProfile()
+                .requestScopes(new Scope("EMAIL"), new Scope("PLUS_LOGIN"))
+                .build();
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        /*
+        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, (GoogleApiClient.OnConnectionFailedListener) this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        SignInButton mEmailSignInButton = (SignInButton) findViewById(R.id.email_sign_in_button);
+
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view){
-                toForum(this);
+                toForum(view);
             }
         });
-        */
+
 
         mLoginFormView = findViewById(R.id.login_form);
     }
@@ -121,7 +137,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         Intent intent = new Intent(this, Forum.class);
         startActivity(intent);
     }
-
 
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
