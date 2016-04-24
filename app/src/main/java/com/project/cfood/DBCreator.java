@@ -14,24 +14,27 @@ public class DBCreator extends SQLiteOpenHelper {
     // Database Name
     public static final String DATABASE_NAME = "cfoodInfo";
 
-    // Contacts table name
+    // Users table name
     public static final String TABLE_USERS = "users";
-    // Shops Table Columns names
+    // Users Table Columns names
     public static final String KEY_USERUSER = "id";
     public static final String KEY_NAME = "name";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_LOCATION = "location";
     public static final String KEY_MYEVENTS = "myEvents";
 
-    // Contacts table name
+    // Events table name
     public static final String TABLE_EVENTS = "events";
-    // Shops Table Columns names
+    // Events Table Columns names
     public static final String KEY_EVENTID = "id";
     public static final String KEY_TITLE = "title";
     public static final String KEY_DESCR = "description";
     public static final String KEY_ADDRESS = "location";
     public static final String KEY_TIME = "time";
     public static final String KEY_EVENTUSER = "user";
+    public static final String KEY_REPORTED = "reported";
+    public static final String KEY_ACTIVE = "active";
+    public static final String KEY_UPVOTES = "upvotes";
 
     public DBCreator(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -49,7 +52,8 @@ public class DBCreator extends SQLiteOpenHelper {
         String CREATE_EVENTS_TABLE = "CREATE TABLE " + TABLE_EVENTS + "("
                 + KEY_EVENTID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT,"
                 + KEY_DESCR + "TEXT" + KEY_ADDRESS + " TEXT" + KEY_TIME
-                + "TEXT" + KEY_EVENTUSER + "INTEGER" + ")";
+                + "TEXT" + KEY_EVENTUSER + "INTEGER" + KEY_REPORTED + "INTEGER"
+                + KEY_ACTIVE + "INTEGER" + KEY_UPVOTES + "INTEGER" + ")";
         db.execSQL(CREATE_EVENTS_TABLE);
 
     }

@@ -1,7 +1,7 @@
 package com.project.cfood;
 
 /**
- * Created by Austin Holler on 4/23/2016.
+ * Created by Andrew Candelaresi on 4/21/2016.
  */
 public class EventClass {
     private int eventID;
@@ -10,6 +10,9 @@ public class EventClass {
     private String address;
     private String time;
     private int userID;
+    private int reportedCount;
+    private int active;
+    protected int upVotes;
 
     public EventClass() {};
 
@@ -46,6 +49,18 @@ public class EventClass {
         this.userID = userID;
     }
 
+    public void setReportedCount(int reportedCount) {
+        this.reportedCount = reportedCount;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
+    }
+
+    public void setUpVotes(int upVotes) {
+        this.upVotes = upVotes;
+    }
+
     public int getEventID() {
         return eventID;
     }
@@ -68,5 +83,30 @@ public class EventClass {
 
     public int getUserID() {
         return userID;
+    }
+
+    public int getReportedCount() {
+        return reportedCount;
+    }
+
+    public int isActive() {
+        return active;
+    }
+
+    public int getUpVotes() {
+        return upVotes;
+    }
+
+    public int increaseUpvote() {
+        this.getUpVotes();
+        upVotes++;
+        return upVotes;
+
+    }
+    public int increaseReportCount() {
+        this.getReportedCount();
+        reportedCount++;
+        return reportedCount;
+
     }
 }

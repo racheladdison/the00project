@@ -12,6 +12,7 @@ public class UserClass {
     private String email;
     private String location;
     private String myEvents;
+    private Integer reputation;
 
     public UserClass() {}
 
@@ -43,6 +44,10 @@ public class UserClass {
         this.myEvents = myEvents;
     }
 
+    public void setReputation(Integer reputation) {
+        this.reputation = reputation;
+    }
+
     public int getUserID() {
         return userID;
     }
@@ -59,4 +64,8 @@ public class UserClass {
     }
 
     public String getMyEvents() { return myEvents; }
+
+    public Integer getReputation() {
+        return reputation;
+    }
 }

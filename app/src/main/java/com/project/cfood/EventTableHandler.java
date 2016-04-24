@@ -30,6 +30,9 @@ public class EventTableHandler {
         values.put(DBCreator.KEY_ADDRESS, event.getAddress());
         values.put(DBCreator.KEY_TIME, event.getTime());
         values.put(DBCreator.KEY_EVENTUSER, event.getUserID());
+        values.put(DBCreator.KEY_REPORTED, event.getReportedCount());
+        values.put(DBCreator.KEY_ACTIVE, event.isActive());
+        values.put(DBCreator.KEY_UPVOTES, event.getUpVotes());
 
         // Inserting Row
         long event_Id = db.insert(DBCreator.TABLE_EVENTS, null, values);
@@ -54,6 +57,9 @@ public class EventTableHandler {
         values.put(DBCreator.KEY_DESCR, event.getDescr());
         values.put(DBCreator.KEY_ADDRESS, event.getAddress());
         values.put(DBCreator.KEY_TIME, event.getTime());
+        values.put(DBCreator.KEY_REPORTED, event.getReportedCount());
+        values.put(DBCreator.KEY_ACTIVE, event.isActive());
+        values.put(DBCreator.KEY_UPVOTES, event.getUpVotes());
 
         // It's a good practice to use parameter ?, instead of concatenate string
         db.update(DBCreator.TABLE_EVENTS, values, DBCreator.KEY_EVENTID + "= ?", new String[] { String.valueOf(event.getEventID()) });
@@ -72,7 +78,10 @@ public class EventTableHandler {
                 DBCreator.KEY_DESCR + "," +
                 DBCreator.KEY_ADDRESS + "," +
                 DBCreator.KEY_TIME + "," +
-                DBCreator.KEY_EVENTUSER +
+                DBCreator.KEY_EVENTUSER + "," +
+                DBCreator.KEY_REPORTED + "," +
+                DBCreator.KEY_ACTIVE + "," +
+                DBCreator.KEY_UPVOTES +
                 " FROM " + DBCreator.TABLE_EVENTS;
 
         //EventClass event = new EventClass();
@@ -86,6 +95,15 @@ public class EventTableHandler {
                 HashMap<String, String> event = new HashMap<String, String>();
                 event.put("id", cursor.getString(cursor.getColumnIndex(DBCreator.KEY_EVENTID)));
                 event.put("name", cursor.getString(cursor.getColumnIndex(DBCreator.KEY_TITLE)));
+                event.setEventID(cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_EVENTID)));
+                event.setTitle(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_TITLE)));
+                event.setDescr(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_DESCR)));
+                event.setAddress(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_ADDRESS)));
+                event.setTime(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_TIME)));
+                event.setUserID(cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_EVENTUSER)));
+                event.setReportedCount(cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_REPORTED)));
+                event.setActive((cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_ACTIVE))));
+                event.setUpVotes(cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_UPVOTES)));
                 eventList.add(event);
 
             } while (cursor.moveToNext());
@@ -104,8 +122,11 @@ public class EventTableHandler {
                 DBCreator.KEY_TITLE + "," +
                 DBCreator.KEY_DESCR + "," +
                 DBCreator.KEY_ADDRESS + "," +
-                DBCreator.KEY_TIME +
-                DBCreator.KEY_EVENTUSER +
+                DBCreator.KEY_TIME + "," +
+                DBCreator.KEY_EVENTUSER + "," +
+                DBCreator.KEY_REPORTED + "," +
+                DBCreator.KEY_ACTIVE + "," +
+                DBCreator.KEY_UPVOTES +
                 " FROM " + DBCreator.TABLE_EVENTS +
                 " WHERE " + DBCreator.KEY_EVENTID + "=?";// It's a good practice to use parameter ?, instead of concatenate string
 
@@ -121,6 +142,9 @@ public class EventTableHandler {
                 event.setAddress(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_ADDRESS)));
                 event.setTime(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_TIME)));
                 event.setUserID(cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_EVENTUSER)));
+                event.setReportedCount(cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_REPORTED)));
+                event.setActive((cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_ACTIVE))));
+                event.setUpVotes(cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_UPVOTES)));
 
             } while (cursor.moveToNext());
         }
