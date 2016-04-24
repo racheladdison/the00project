@@ -1,7 +1,8 @@
 package com.project.cfood;
 
 /**
- * Created by sarahwaldner on 4/21/16.
+ * Created by Leif Waldner on 4/21/16.
+ * Edited by Austin Holler on 4/23/16.
  */
 
 //TODO make userclass private
@@ -10,12 +11,17 @@ public class UserClass {
     private String name;
     private String email;
     private String location;
+    private String myEvents;
+    private Integer reputation;
 
-    public UserClass(int userID, String name, String description, String location, String time, String date) {
+    public UserClass() {}
+
+    public UserClass(int userID, String name, String description, String email, String location,String myEvents) {
         this.userID = userID;
         this.name = name;
         this.location = location;
         this.email = email;
+        this.myEvents = myEvents;
     }
 
     public void setUserID(int userID) {
@@ -28,6 +34,18 @@ public class UserClass {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setMyEvents(String myEvents) {
+        this.myEvents = myEvents;
+    }
+
+    public void setReputation(Integer reputation) {
+        this.reputation = reputation;
     }
 
     public int getUserID() {
@@ -43,5 +61,11 @@ public class UserClass {
     }
     public String getEmail() {
         return email;
+    }
+
+    public String getMyEvents() { return myEvents; }
+
+    public Integer getReputation() {
+        return reputation;
     }
 }
