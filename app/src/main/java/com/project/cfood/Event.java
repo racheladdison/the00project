@@ -4,7 +4,9 @@ package com.project.cfood;
  * Created by Andrew Candelaresi on 4/21/2016.
  */
 public class Event {
+    private int EventID;
     private int userID;
+    private int pageID;
     private String name;
     private String description;
     private String location;
@@ -12,15 +14,20 @@ public class Event {
     private String date;
     private int reportedCount;
     private boolean active;
+
     protected int upVotes;
 
-    public Event(int userID, String name, String description, String location, String time, String date) {
+    public Event(int EventID,int pageID, int userID, String name, String description, String location, String time, String date) {
+        this.EventID = EventID;
+        this.pageID = pageID;
         this.userID = userID;
         this.name = name;
         this.description = description;
         this.location = location;
         this.time = time;
         this.date = date;
+        this.reportedCount = 0;
+        this.upVotes = 0;
     }
 
     public void setUserID(int userID) {
@@ -106,5 +113,6 @@ public class Event {
         return reportedCount;
 
     }
+
 
 }
