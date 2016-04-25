@@ -1,5 +1,6 @@
 package com.project.cfood;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
@@ -15,10 +16,13 @@ import java.util.Arrays;
 public class Forum extends AppCompatActivity {
     private ListView forumListView ;
     private ArrayAdapter<String> listAdapter ;
+    private DBCreator dbCreator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SQLiteDatabase db = dbCreator.getReadableDatabase();
+
         setContentView(R.layout.activity_forum);
         //Declare Toolbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -32,9 +36,7 @@ public class Forum extends AppCompatActivity {
         forumListView = (ExpandableListView) findViewById( R.id.forumListView);
         //TODO replace this with a database call that creates a list of event objects
         //String[] events = new Event()
-
         ArrayList<String> EventList = new ArrayList<String>();
-
         //EventList.addAll( Arrays.asList(/*replace with eventList*/) );
 
         // Create ArrayAdapter using the planet list.
