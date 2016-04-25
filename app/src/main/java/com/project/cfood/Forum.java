@@ -5,8 +5,16 @@ import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Forum extends AppCompatActivity {
+    private ListView forumListView ;
+    private ArrayAdapter<String> listAdapter ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +28,20 @@ public class Forum extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         // Get access to the custom title view
         TextView mTitle = (TextView) myToolbar.findViewById(R.id.toolbar_title);
+
+        forumListView = (ExpandableListView) findViewById( R.id.forumListView);
+        //TODO replace this with a database call that creates a list of event objects
+        //String[] events = new Event()
+
+        ArrayList<String> EventList = new ArrayList<String>();
+
+        //EventList.addAll( Arrays.asList(/*replace with eventList*/) );
+
+        // Create ArrayAdapter using the planet list.
+        listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, EventList);
+
+        // Set each of the the ArrayAdapters as the ListView's adapter
+        forumListView.setAdapter( listAdapter );
     }
 
 }
