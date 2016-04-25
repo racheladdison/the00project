@@ -42,12 +42,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +86,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
                 .requestEmail()
                 .build();
         // [END configure_signin]
@@ -93,6 +97,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .addApi(Plus.API)
                 .build();
         // [END build_client]
 
@@ -145,6 +150,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
+            Person person  = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+            Log.i(TAG, "--------------------------------");
+            Log.i(TAG, "Display Name: " + person.getDisplayName());
+            Log.i(TAG, "Gender: " + person.getGender());
+            Log.i(TAG, "AboutMe: " + person.getAboutMe());
+            Log.i(TAG, "Birthday: " + person.getBirthday());
+            Log.i(TAG, "Current Location: " + person.getCurrentLocation());
+            Log.i(TAG, "Language: " + person.getLanguage());
         }
     }
     // [END onActivityResult]
