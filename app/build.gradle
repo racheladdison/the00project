@@ -6,7 +6,7 @@ android {
         config {
             keyAlias 'asdf'
             keyPassword 'yourmom'
-            storeFile file('X:/StudioProjects/the00project/keystore.jks')
+            storeFile file('keystore.jks')
             storePassword 'qwerty'
         }
     }
