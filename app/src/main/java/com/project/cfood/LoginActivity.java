@@ -75,8 +75,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         setContentView(R.layout.activity_login);
 
         // Views
-        mStatusTextView = (TextView) findViewById(R.id.status);
-
         // Button listeners
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
@@ -97,7 +95,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .addApi(Plus.API)
                 .build();
         // [END build_client]
 
@@ -150,14 +147,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
-            Person person  = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
-            Log.i(TAG, "--------------------------------");
-            Log.i(TAG, "Display Name: " + person.getDisplayName());
-            Log.i(TAG, "Gender: " + person.getGender());
-            Log.i(TAG, "AboutMe: " + person.getAboutMe());
-            Log.i(TAG, "Birthday: " + person.getBirthday());
-            Log.i(TAG, "Current Location: " + person.getCurrentLocation());
-            Log.i(TAG, "Language: " + person.getLanguage());
+            Log.d(TAG, "LOGGED IN!");
         }
     }
     // [END onActivityResult]
@@ -168,7 +158,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
+            Log.d(TAG, "LOGGED IN: "+acct.getEmail() + " " + acct.getId());
             updateUI(true);
         } else {
             // Signed out, show unauthenticated UI.
@@ -240,8 +230,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             Intent intent = new Intent(this, Forum.class);
             startActivity(intent);
         } else {
-            mStatusTextView.setText(R.string.signed_out);
-
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
         }
