@@ -69,8 +69,8 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@android:color/holo_blue_dark">
+        android:layout_weight="0.38"
+        android:background="@android:color/background_light">
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_button"
@@ -105,13 +105,6 @@
                 android:layout_weight="1"
                 android:text="@string/disconnect" />
         </LinearLayout>
-        <TextView
-            android:id="@+id/status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/signed_out"
-            android:textColor="@android:color/white"
-            android:textSize="14sp" />
 
     </RelativeLayout>
 
