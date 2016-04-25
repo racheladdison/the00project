@@ -10,11 +10,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import android.database.Cursor;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -29,14 +31,16 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class ProfileActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
     private ListView profileListView ;
     private ArrayAdapter<String> listAdapter ;
     private TextView profileEmailView;
     private TextView profileUsernameView;
-    private ImageView profileImageView;
     private DBCreator dbCreator;
+    private ImageView profileImageView;
+    private Button button;
     private GoogleSignInResult result;
     private GoogleSignInAccount acct;
     private GoogleApiClient mGoogleAPIClient;
@@ -54,6 +58,7 @@ public class ProfileActivity extends AppCompatActivity implements GoogleApiClien
         profileEmailView = (TextView) findViewById( R.id.email);
         profileUsernameView = (TextView) findViewById( R.id.username);
         profileImageView = (ImageView) findViewById( R.id.userphoto);
+        button = (Button) findViewById( R.id.edit_profile);
 
         //Access google signin
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -65,20 +70,25 @@ public class ProfileActivity extends AppCompatActivity implements GoogleApiClien
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+        signIn();
 
-        //TODO replace this with a database call that creates a list of event objects
-        //String[] events = new Event()
-        ArrayList<String> EventList = new ArrayList<String>();
-        //EventList.addAll( Arrays.asList(/*replace with eventList*/) );
+        Cursor res = db.rawQuery("SELECT * FROM users WHERE id="+acct.getIdToken()+"", null);
 
         // Create ArrayAdapter usig the event list.
-        listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, EventList);
+        listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, getEventList(db, res));
 
         // Set each of the the ArrayAdapters as the ListView's adapter
         profileListView.setAdapter( listAdapter );
-        //profileEmailView.setText();
-        //profileUsernameView.setText();
-        //profileImageView.setImage();
+        profileEmailView.setText(res.getString(res.getColumnIndex("email")));
+        profileUsernameView.setText(res.getString(res.getColumnIndex("name")));
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ProfileActivity.this, EditProfileActivity.class));
+            }
+        });
+        //profileImageView.setImageResource();
     }
 
     private void signIn() {
@@ -90,45 +100,28 @@ public class ProfileActivity extends AppCompatActivity implements GoogleApiClien
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 9001){
+        if (requestCode == 9001) {
             result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             acct = result.getSignInAccount();
         }
     }
 
-    public String getUserID() {
-        signIn();
-        return acct.getId();
-    }
-
-
-    public void EditProfile() {
-        //Edit Profile
-        //set on click listener for button? Or is that coded into the button itself?
-        //.setOnClickListener((view -> {})
-        //isEmailValid?
-        //Change Password?
-        //Set view to edit profile forum? -> same as login?
-
-    }
-
-    public void EditEvents() {
-        //Edit Events
-
-    }
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return ((password.length() > 4));
-    }
-
-    public void toRegister(View view) {
-        Intent intent = new Intent(this, RegisterActivity.class);
-        startActivity(intent);
+    public ArrayList getEventList(SQLiteDatabase db, Cursor UserCursor) {
+        ArrayList<HashMap<String, String>> eventList = new ArrayList<HashMap<String, String>>();
+        Cursor EventCursor = db.rawQuery("SELECT * FROM events WHERE id="+UserCursor.getColumnIndex("myEvents")+"", null);
+        if (EventCursor.moveToFirst()) {
+            do {
+                HashMap<String, String> events = new HashMap<String, String>();
+                events.put("title", EventCursor.getString(EventCursor.getColumnIndex("title")));
+                events.put("location", EventCursor.getString(EventCursor.getColumnIndex("title")));
+                events.put("description", EventCursor.getString(EventCursor.getColumnIndex("description")));
+                events.put("time", EventCursor.getString(EventCursor.getColumnIndex("time")));
+                events.put("user", EventCursor.getString(EventCursor.getColumnIndex("user")));
+                eventList.add(events);
+            }
+            while (EventCursor.moveToNext());
+        }
+        return eventList;
     }
 
     public void toForum(View view) {
