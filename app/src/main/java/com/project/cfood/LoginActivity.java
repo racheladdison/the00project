@@ -100,14 +100,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        /*
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+
+        /*mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view){
                 toForum(this);
             }
-        });
-        */
+        });*/
+
 
         mLoginFormView = findViewById(R.id.login_form);
     }

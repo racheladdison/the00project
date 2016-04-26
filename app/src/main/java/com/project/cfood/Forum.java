@@ -63,7 +63,7 @@ public class Forum extends AppCompatActivity
         } else if (id == R.id.nav_map_view) {
             toMap(view);
         } else if (id == R.id.nav_profile) {
-            //toProfile(View view)
+            toProfile(view);
         } else if (id == R.id.nav_sign_out) {
 
         }
@@ -82,12 +82,12 @@ public class Forum extends AppCompatActivity
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
     }
-    /*
+
     public void toProfile(View view) {
-        Intent intent = new Intent(this, Profile.class);
+        Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
-
+/*
     public void toSignOut(View view) {
         Intent intent = new Intent(this, SignOut.class);
         startActivity(intent);
