@@ -1,6 +1,7 @@
 package com.project.cfood;
 
 
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.Intent;
 
@@ -23,6 +24,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class Forum extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ListView forumListView ;
@@ -47,18 +49,15 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
 
         forumListView = (ExpandableListView) findViewById( R.id.forumListView);
         //TODO replace this with a database call that creates a list of event objects
-        //String[] events = new Event()
-        ArrayList<String> EventList = new ArrayList<String>();
-        //EventList.addAll( Arrays.asList(/*replace with eventList*/) );
 
         // Create ArrayAdapter using the planet list.
-        listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, EventList);
+        listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, getEventList(db));
 
         // Set each of the the ArrayAdapters as the ListView's adapter
         forumListView.setAdapter( listAdapter );
 
-        mTitle = (TextView) myToolbar.findViewById(R.id.toolbar_title);
 
+        //Nav bar stuff
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, myToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -67,6 +66,24 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
+    }
+
+    public ArrayList getEventList(SQLiteDatabase db) {
+        ArrayList<HashMap<String, String>> eventList = new ArrayList<HashMap<String, String>>();
+        Cursor EventCursor = db.rawQuery("SELECT * FROM events", null);
+        if (EventCursor.moveToFirst()) {
+            do {
+                HashMap<String, String> events = new HashMap<String, String>();
+                events.put("title", EventCursor.getString(EventCursor.getColumnIndex("title")));
+                events.put("location", EventCursor.getString(EventCursor.getColumnIndex("title")));
+                events.put("description", EventCursor.getString(EventCursor.getColumnIndex("description")));
+                events.put("time", EventCursor.getString(EventCursor.getColumnIndex("time")));
+                events.put("user", EventCursor.getString(EventCursor.getColumnIndex("user")));
+                eventList.add(events);
+            }
+            while (EventCursor.moveToNext());
+        }
+        return eventList;
     }
 
     @Override
@@ -79,7 +96,6 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
             super.onBackPressed();
         }
     }
-
     @SuppressWarnings("StatementWithEmptyBody")
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
