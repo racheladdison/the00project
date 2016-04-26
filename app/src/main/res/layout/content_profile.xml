@@ -17,7 +17,7 @@
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:id="@+id/imageView2"
+        android:id="@+id/userphoto"
         android:background="#000"/>
 
     <TextView
@@ -25,24 +25,24 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Profile Name/Username"
-        android:id="@+id/textView1" />
+        android:id="@+id/username" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Profile Email"
-        android:id="@+id/textView2"
+        android:id="@+id/email"
     />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Edit Profile Information"
-        android:id="@+id/button2" />
+        android:id="@+id/edit_profile" />
 
-    <ListView
+    <ExpandableListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/mainListView" />
+        android:id="@+id/profileListView" />
 
 </LinearLayout>

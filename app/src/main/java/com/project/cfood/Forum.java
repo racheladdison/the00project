@@ -1,6 +1,9 @@
 package com.project.cfood;
 
+
+import android.database.sqlite.SQLiteDatabase;
 import android.content.Intent;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.design.widget.NavigationView;
@@ -14,26 +17,51 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
+import android.widget.ListView;
 
-public class Forum extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import java.util.ArrayList;
+import java.util.Arrays;
 
+public class Forum extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private ListView forumListView ;
+    private ArrayAdapter<String> listAdapter ;
+    private DBCreator dbCreator;
+    private TextView mTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SQLiteDatabase db = dbCreator.getReadableDatabase();
+
         setContentView(R.layout.activity_forum);
         //Declare Toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         //Set the use of custom toolbar
-        setSupportActionBar(toolbar);
+        setSupportActionBar(myToolbar);
         // Remove default title text
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         // Get access to the custom title view
-        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+
+        mTitle = (TextView) myToolbar.findViewById(R.id.toolbar_title);
+
+        forumListView = (ExpandableListView) findViewById( R.id.forumListView);
+        //TODO replace this with a database call that creates a list of event objects
+        //String[] events = new Event()
+        ArrayList<String> EventList = new ArrayList<String>();
+        //EventList.addAll( Arrays.asList(/*replace with eventList*/) );
+
+        // Create ArrayAdapter using the planet list.
+        listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, EventList);
+
+        // Set each of the the ArrayAdapters as the ListView's adapter
+        forumListView.setAdapter( listAdapter );
+
+        mTitle = (TextView) myToolbar.findViewById(R.id.toolbar_title);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, myToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -91,6 +119,7 @@ public class Forum extends AppCompatActivity
     public void toSignOut(View view) {
         Intent intent = new Intent(this, SignOut.class);
         startActivity(intent);
+
     }
     */
 

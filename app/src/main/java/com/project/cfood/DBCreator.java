@@ -21,7 +21,7 @@ public class DBCreator extends SQLiteOpenHelper {
     public static final String KEY_NAME = "name";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_LOCATION = "location";
-    public static final String KEY_MYEVENTS = "myEvents";
+    public static final String KEY_MYEVENTID = "myEventId";
 
     // Events table name
     public static final String TABLE_EVENTS = "events";
@@ -45,7 +45,7 @@ public class DBCreator extends SQLiteOpenHelper {
 
         String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + "("
                 + KEY_USERUSER + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-                + KEY_EMAIL + "TEXT" + KEY_LOCATION + " TEXT" + KEY_MYEVENTS
+                + KEY_EMAIL + "TEXT" + KEY_LOCATION + " TEXT" + KEY_MYEVENTID
                 + "TEXT" + ")";
         db.execSQL(CREATE_USERS_TABLE);
 

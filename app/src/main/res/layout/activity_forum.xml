@@ -30,7 +30,17 @@
             app:headerLayout="@layout/nav_header_menu"
             app:menu="@menu/activity_main_drawer" />
 
+
+        <ExpandableListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/forumListView"
+            android:layout_below="@+id/my_toolbar"
+            android:layout_alignParentEnd="true"
+            android:textFilterEnabled="false" />
+
     </android.support.v4.widget.DrawerLayout>
+
 
 </RelativeLayout>
 
