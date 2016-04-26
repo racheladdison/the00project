@@ -5,6 +5,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -35,7 +39,7 @@ import java.util.HashMap;
 
 public class ProfileActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener, NavigationView.OnNavigationItemSelectedListener {
-
+   
     private ListView profileListView ;
     private ArrayAdapter<String> listAdapter ;
     private TextView profileEmailView;
@@ -55,6 +59,25 @@ public class ProfileActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         //TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         //Load Username, Email, Name from SQL database
+        SQLiteDatabase db = dbCreator.getReadableDatabase();
+
+        profileListView = (ExpandableListView) findViewById( R.id.forumListView);
+        profileEmailView = (TextView) findViewById( R.id.email);
+        profileUsernameView = (TextView) findViewById( R.id.username);
+        profileImageView = (ImageView) findViewById( R.id.userphoto);
+        button = (Button) findViewById( R.id.edit_profile);
+
+        //Access google signin
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
+                .requestEmail()
+                .build();
+
+        mGoogleAPIClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        signIn();
 
         //Load Username, Email, Name from SQL database
         SQLiteDatabase db = dbCreator.getReadableDatabase();
@@ -136,12 +159,23 @@ public class ProfileActivity extends AppCompatActivity
             while (EventCursor.moveToNext());
         }
         return eventList;
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ProfileActivity.this, EditProfileActivity.class));
+            }
+        });
+        //profileImageView.setImageResource();
     }
 
-    public void toForum(View view) {
-        Intent intent = new Intent(this, Forum.class);
-        startActivity(intent);
+    private void signIn() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleAPIClient);
+        startActivityForResult(signInIntent, 9001);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
 
     @Override
@@ -149,8 +183,26 @@ public class ProfileActivity extends AppCompatActivity
 
     }
 
-    public void toRegister(View view) {
-        Intent intent = new Intent(this, RegisterActivity.class);
+    public ArrayList getEventList(SQLiteDatabase db, Cursor UserCursor) {
+        ArrayList<HashMap<String, String>> eventList = new ArrayList<HashMap<String, String>>();
+        Cursor EventCursor = db.rawQuery("SELECT * FROM events WHERE id="+UserCursor.getColumnIndex("myEvents")+"", null);
+        if (EventCursor.moveToFirst()) {
+            do {
+                HashMap<String, String> events = new HashMap<String, String>();
+                events.put("title", EventCursor.getString(EventCursor.getColumnIndex("title")));
+                events.put("location", EventCursor.getString(EventCursor.getColumnIndex("title")));
+                events.put("description", EventCursor.getString(EventCursor.getColumnIndex("description")));
+                events.put("time", EventCursor.getString(EventCursor.getColumnIndex("time")));
+                events.put("user", EventCursor.getString(EventCursor.getColumnIndex("user")));
+                eventList.add(events);
+            }
+            while (EventCursor.moveToNext());
+        }
+        return eventList;
+    }
+
+    public void toForum(View view) {
+        Intent intent = new Intent(this, Forum.class);
         startActivity(intent);
     }
 

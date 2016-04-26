@@ -32,3 +32,4 @@ public class EditProfileActivity extends AppCompatActivity {
         return ((password.length() > 4));
     }
 }
+
