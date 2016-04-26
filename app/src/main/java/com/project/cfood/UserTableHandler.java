@@ -28,7 +28,7 @@ public class UserTableHandler {
         values.put(DBCreator.KEY_NAME, user.getName());
         values.put(DBCreator.KEY_EMAIL, user.getEmail());
         values.put(DBCreator.KEY_LOCATION, user.getLocation());
-        values.put(DBCreator.KEY_MYEVENTS, user.getMyEvents());
+        values.put(DBCreator.KEY_MYEVENTID, user.getMyEvents());
 
         // Inserting Row
         long user_Id = db.insert(DBCreator.TABLE_USERS, null, values);
@@ -52,7 +52,7 @@ public class UserTableHandler {
         values.put(DBCreator.KEY_NAME, user.getName());
         values.put(DBCreator.KEY_EMAIL, user.getEmail());
         values.put(DBCreator.KEY_LOCATION, user.getLocation());
-        values.put(DBCreator.KEY_MYEVENTS, user.getMyEvents());
+        values.put(DBCreator.KEY_MYEVENTID, user.getMyEvents());
 
         // It's a good practice to use parameter ?, instead of concatenate string
         db.update(DBCreator.TABLE_USERS, values, DBCreator.KEY_USERUSER + "= ?", new String[] { String.valueOf(user.getUserID()) });
@@ -100,7 +100,7 @@ public class UserTableHandler {
                 DBCreator.KEY_NAME + "," +
                 DBCreator.KEY_EMAIL + "," +
                 DBCreator.KEY_LOCATION + "," +
-                DBCreator.KEY_MYEVENTS +
+                DBCreator.KEY_MYEVENTID +
                 " FROM " + DBCreator.TABLE_USERS +
                 " WHERE " + DBCreator.KEY_USERUSER + "=?";// It's a good practice to use parameter ?, instead of concatenate string
 
@@ -114,7 +114,7 @@ public class UserTableHandler {
                 user.setName(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_NAME)));
                 user.setEmail(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_EMAIL)));
                 user.setLocation(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_LOCATION)));
-                user.setMyEvents(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_MYEVENTS)));
+                user.setMyEvents(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_MYEVENTID)));
 
             } while (cursor.moveToNext());
         }
