@@ -1,5 +1,12 @@
 package com.project.cfood;
 
+import org.json.JSONObject;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
+import android.text.TextUtils;
 /**
  * Created by Leif Waldner on 4/21/16.
  * Edited by Austin Holler on 4/23/16.
@@ -7,16 +14,16 @@ package com.project.cfood;
 
 //TODO make userclass private
 public class UserClass {
+    private String password;
     private int userID;
     private String name;
     private String email;
     private String location;
-    private String myEvents;
+    private ArrayList<String> myEvents;
     private Integer reputation;
-
     public UserClass() {}
 
-    public UserClass(int userID, String name, String description, String email, String location,String myEvents) {
+    public UserClass(int userID, String name, String email, String location, ArrayList<String> myEvents) {
         this.userID = userID;
         this.name = name;
         this.location = location;
@@ -40,9 +47,7 @@ public class UserClass {
         this.email = email;
     }
 
-    public void setMyEvents(String myEvents) {
-        this.myEvents = myEvents;
-    }
+    public void setMyEvents(ArrayList<String> myEvents) { this.myEvents = myEvents; }
 
     public void setReputation(Integer reputation) {
         this.reputation = reputation;
@@ -59,11 +64,17 @@ public class UserClass {
     public String getLocation() {
         return location;
     }
+
     public String getEmail() {
         return email;
     }
 
-    public String getMyEvents() { return myEvents; }
+    public ArrayList<String> getArrayListEvents() { return myEvents; }
+
+    public String getStringEvents() {
+        String joined = TextUtils.join(", ", this.myEvents);
+        return joined;
+    }
 
     public Integer getReputation() {
         return reputation;

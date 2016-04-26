@@ -115,7 +115,7 @@ public class EventTableHandler {
 
     } */
 
-    public EventClass getEventById(int Id){
+    public EventClass getEventById(String Id){
         SQLiteDatabase db = dbCreator.getReadableDatabase();
         String selectQuery =  "SELECT  " +
                 DBCreator.KEY_EVENTID + "," +

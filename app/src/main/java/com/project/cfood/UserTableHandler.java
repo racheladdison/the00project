@@ -5,7 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -28,7 +30,7 @@ public class UserTableHandler {
         values.put(DBCreator.KEY_NAME, user.getName());
         values.put(DBCreator.KEY_EMAIL, user.getEmail());
         values.put(DBCreator.KEY_LOCATION, user.getLocation());
-        values.put(DBCreator.KEY_MYEVENTID, user.getMyEvents());
+        values.put(DBCreator.KEY_MYEVENTID, user.getStringEvents());
 
         // Inserting Row
         long user_Id = db.insert(DBCreator.TABLE_USERS, null, values);
@@ -36,7 +38,7 @@ public class UserTableHandler {
         return (int) user_Id;
     }
 
-    public void delete(int user_Id) {
+    public void delete(String user_Id) {
 
         SQLiteDatabase db = dbCreator.getWritableDatabase();
         // It's a good practice to use parameter ?, instead of concatenate string
@@ -52,7 +54,7 @@ public class UserTableHandler {
         values.put(DBCreator.KEY_NAME, user.getName());
         values.put(DBCreator.KEY_EMAIL, user.getEmail());
         values.put(DBCreator.KEY_LOCATION, user.getLocation());
-        values.put(DBCreator.KEY_MYEVENTID, user.getMyEvents());
+        values.put(DBCreator.KEY_MYEVENTID, user.getStringEvents());
 
         // It's a good practice to use parameter ?, instead of concatenate string
         db.update(DBCreator.TABLE_USERS, values, DBCreator.KEY_USERUSER + "= ?", new String[] { String.valueOf(user.getUserID()) });
@@ -94,7 +96,7 @@ public class UserTableHandler {
 
     } */
 
-    public UserClass getUserById(int Id){
+    public UserClass getUserById(String Id){
         SQLiteDatabase db = dbCreator.getReadableDatabase();
         String selectQuery =  "SELECT  " +
                 DBCreator.KEY_NAME + "," +
@@ -114,7 +116,11 @@ public class UserTableHandler {
                 user.setName(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_NAME)));
                 user.setEmail(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_EMAIL)));
                 user.setLocation(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_LOCATION)));
-                user.setMyEvents(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_MYEVENTID)));
+
+                //Parse myEvents to an ArrayList before inserting it into the User Class
+                String s = cursor.getString(cursor.getColumnIndex(DBCreator.KEY_MYEVENTID));
+                ArrayList<String> myList = new ArrayList<String>(Arrays.asList(s.split(",")));
+                user.setMyEvents(myList);
 
             } while (cursor.moveToNext());
         }
