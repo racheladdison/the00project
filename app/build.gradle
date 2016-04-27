@@ -6,7 +6,7 @@ android {
         debug {
             keyAlias 'keystore'
             keyPassword 'qwerty'
-            storeFile file('C:/Users/Austin/CS_Projects/Android/the00project/keystore.jks')
+            storeFile file('C:/Users/KingKongCake/StudioProjects/the00project/keystore.jks')
             storePassword 'qwerty'
         }
     }
@@ -43,6 +43,8 @@ dependencies {
     compile 'com.android.support:support-v4:23.3.0'
     compile files('Libs/gson-2.6.2.jar')
 }
+
+
 
 
 

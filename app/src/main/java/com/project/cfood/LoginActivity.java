@@ -145,6 +145,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            Intent intent = new Intent(this, Forum.class);
+            startActivity(intent);
+            GoogleSignInAccount acct = result.getSignInAccount();
             handleSignInResult(result);
             Log.d(TAG, "LOGGED IN!");
         }
@@ -156,6 +159,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
+           Intent intent = new Intent(this, Forum.class);
+            startActivity(intent);
             GoogleSignInAccount acct = result.getSignInAccount();
             Log.d(TAG, "LOGGED IN: "+acct.getEmail() + " " + acct.getId());
             updateUI(true);
