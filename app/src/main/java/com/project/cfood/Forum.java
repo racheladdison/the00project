@@ -1,12 +1,14 @@
 package com.project.cfood;
 
 
+import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.Intent;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -23,17 +25,32 @@ import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.common.api.Status;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class Forum extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Forum extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener {
     private ListView forumListView ;
     private ArrayAdapter<String> listAdapter ;
     private DBCreator dbCreator;
     private TextView mTitle;
     private EventTableHandler eventTable;
+    private ProgressDialog mProgressDialog;
+    private GoogleSignInAccount acct;
+    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +87,32 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
+                .requestId()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        OptionalPendingResult<GoogleSignInResult> pendingResult =
+                Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+        if (pendingResult.isDone()) {
+            acct = pendingResult.get().getSignInAccount();
+        } else {
+            // There's no immediate result ready, displays some progress indicator and waits for the
+            // async callback.
+            showProgressDialog();
+            pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(@NonNull GoogleSignInResult result) {
+                    acct = result.getSignInAccount();
+                    hideProgressDialog();
+                }
+            });
+        }
     }
 
     @Override
@@ -130,12 +173,39 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
-/*
+
+    private void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.hide();
+        }
+    }
+
     public void toSignOut(View view) {
-        Intent intent = new Intent(this, SignOut.class);
-        startActivity(intent);
+        final Intent LoggedOut = new Intent(this, LoginActivity.class);
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        startActivity(LoggedOut);
+                    }
+                });
 
     }
-    */
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+        // be available.
+        Log.d("Event", "onConnectionFailed:" + connectionResult);
+    }
 }
