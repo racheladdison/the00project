@@ -70,7 +70,7 @@ public class ProfileActivity extends AppCompatActivity
         button = (Button) findViewById( R.id.edit_profile);
 
         //Access google signin
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        /*GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(new Scope(Scopes.PLUS_LOGIN))
                 .requestEmail()
                 .build();
@@ -80,27 +80,9 @@ public class ProfileActivity extends AppCompatActivity
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
         signIn();
-
-        //Load Username, Email, Name from SQL database
-        SQLiteDatabase db = dbCreator.getReadableDatabase();
-
-        profileListView = (ExpandableListView) findViewById( R.id.forumListView);
-        profileEmailView = (TextView) findViewById( R.id.email);
-        profileUsernameView = (TextView) findViewById( R.id.username);
-        profileImageView = (ImageView) findViewById( R.id.userphoto);
-        button = (Button) findViewById( R.id.edit_profile);
-
-        //Access google signin
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
-                .requestEmail()
-                .build();
-
-        mGoogleAPIClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-        signIn();
+*/
+        mGoogleAPIClient = LoginActivity.getApiClient();
+        acct = LoginActivity.getSignInResult().getSignInAccount();
 
         Cursor res = db.rawQuery("SELECT * FROM users WHERE id="+acct.getIdToken()+"", null);
 
@@ -130,61 +112,6 @@ public class ProfileActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
     }
 
-    private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleAPIClient);
-        startActivityForResult(signInIntent, 9001);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 9001) {
-            result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            acct = result.getSignInAccount();
-        }
-    }
-
-    public ArrayList getEventList(SQLiteDatabase db, Cursor UserCursor) {
-        ArrayList<HashMap<String, String>> eventList = new ArrayList<HashMap<String, String>>();
-        Cursor EventCursor = db.rawQuery("SELECT * FROM events WHERE id="+UserCursor.getColumnIndex("myEvents")+"", null);
-        if (EventCursor.moveToFirst()) {
-            do {
-                HashMap<String, String> events = new HashMap<String, String>();
-                events.put("title", EventCursor.getString(EventCursor.getColumnIndex("title")));
-                events.put("location", EventCursor.getString(EventCursor.getColumnIndex("title")));
-                events.put("description", EventCursor.getString(EventCursor.getColumnIndex("description")));
-                events.put("time", EventCursor.getString(EventCursor.getColumnIndex("time")));
-                events.put("user", EventCursor.getString(EventCursor.getColumnIndex("user")));
-                eventList.add(events);
-            }
-            while (EventCursor.moveToNext());
-        }
-        return eventList;
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ProfileActivity.this, EditProfileActivity.class));
-            }
-        });
-        //profileImageView.setImageResource();
-    }
-
-    private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleAPIClient);
-        startActivityForResult(signInIntent, 9001);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
     public ArrayList getEventList(SQLiteDatabase db, Cursor UserCursor) {
         ArrayList<HashMap<String, String>> eventList = new ArrayList<HashMap<String, String>>();
         Cursor EventCursor = db.rawQuery("SELECT * FROM events WHERE id="+UserCursor.getColumnIndex("myEvents")+"", null);
@@ -207,7 +134,7 @@ public class ProfileActivity extends AppCompatActivity
         Intent intent = new Intent(this, Forum.class);
         startActivity(intent);
     }
-
+            
     public void toMap(View view) {
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
