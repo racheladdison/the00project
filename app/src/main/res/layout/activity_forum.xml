@@ -30,21 +30,14 @@
             app:headerLayout="@layout/nav_header_menu"
             app:menu="@menu/activity_main_drawer" />
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
         <ExpandableListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/forumListView"
             android:layout_below="@+id/my_toolbar"
             android:layout_alignParentEnd="true"
-<<<<<<< Updated upstream
-            android:textFilterEnabled="false"/>
-=======
+
             android:textFilterEnabled="false" />
->>>>>>> Stashed changes
 
     </android.support.v4.widget.DrawerLayout>
 

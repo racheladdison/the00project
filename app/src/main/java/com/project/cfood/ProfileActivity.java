@@ -1,13 +1,11 @@
 package com.project.cfood;
 
 import android.content.Intent;
-import android.database.Cursor;
+
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
+
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import android.database.Cursor;
+
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -33,13 +33,15 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class ProfileActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener, NavigationView.OnNavigationItemSelectedListener {
-   
+
     private ListView profileListView ;
     private ArrayAdapter<String> listAdapter ;
     private TextView profileEmailView;
@@ -253,3 +255,4 @@ public class ProfileActivity extends AppCompatActivity
     }
 
 }
+

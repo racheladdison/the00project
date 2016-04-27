@@ -13,15 +13,15 @@ import java.util.HashMap;
  */
 public class EventTableHandler {
 
-    private DBCreator dbCreator;
+    private EventClass event;
 
-    public EventTableHandler(Context context){
-        dbCreator = new DBCreator(context);
+    public EventTableHandler(){
+        event = new EventClass();
     }
 
     public int insertEvent(EventClass event) {
 
-        SQLiteDatabase db = dbCreator.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values = new ContentValues();
 
         values.put(DBCreator.KEY_EVENTID, event.getEventID());
@@ -36,21 +36,21 @@ public class EventTableHandler {
 
         // Inserting Row
         long event_Id = db.insert(DBCreator.TABLE_EVENTS, null, values);
-        db.close(); // Closing database connection
+        DatabaseManager.getInstance().closeDatabase();
         return (int) event_Id;
     }
 
     public void delete(int event_Id) {
 
-        SQLiteDatabase db = dbCreator.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         // It's a good practice to use parameter ?, instead of concatenate string
         db.delete(DBCreator.TABLE_EVENTS, DBCreator.KEY_EVENTID + "= ?", new String[] { String.valueOf(event_Id) });
-        db.close(); // Closing database connection
+        DatabaseManager.getInstance().closeDatabase(); // Closing database connection
     }
 
     public void update(EventClass event) {
 
-        SQLiteDatabase db = dbCreator.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values = new ContentValues();
 
         values.put(DBCreator.KEY_TITLE, event.getTitle());
@@ -63,7 +63,7 @@ public class EventTableHandler {
 
         // It's a good practice to use parameter ?, instead of concatenate string
         db.update(DBCreator.TABLE_EVENTS, values, DBCreator.KEY_EVENTID + "= ?", new String[] { String.valueOf(event.getEventID()) });
-        db.close(); // Closing database connection
+        DatabaseManager.getInstance().closeDatabase(); // Closing database connection
     }
 
     /* Don't know if we'll actually ever need this, it returns a list of events,
@@ -71,7 +71,7 @@ public class EventTableHandler {
 
     public ArrayList<HashMap<String, String>> getStudentList() {
         //Open connection to read only
-        SQLiteDatabase db = dbCreator.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         String selectQuery =  "SELECT  " +
                 DBCreator.KEY_EVENTID + "," +
                 DBCreator.KEY_TITLE + "," +
@@ -110,13 +110,13 @@ public class EventTableHandler {
         }
 
         cursor.close();
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
         return eventList;
 
     } */
 
     public EventClass getEventById(int Id){
-        SQLiteDatabase db = dbCreator.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         String selectQuery =  "SELECT  " +
                 DBCreator.KEY_EVENTID + "," +
                 DBCreator.KEY_TITLE + "," +
@@ -150,7 +150,7 @@ public class EventTableHandler {
         }
 
         cursor.close();
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
         return event;
     }
 
