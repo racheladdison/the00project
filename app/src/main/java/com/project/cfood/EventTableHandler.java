@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Austin Holler on 4/23/2016.
@@ -67,9 +68,9 @@ public class EventTableHandler {
     }
 
     /* Don't know if we'll actually ever need this, it returns a list of events,
-       but I figured I'd add it in because it could eventually be useful
+       but I figured I'd add it in because it could eventually be useful */
 
-    public ArrayList<HashMap<String, String>> getStudentList() {
+    public List<EventClass> getEventList() {
         //Open connection to read only
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         String selectQuery =  "SELECT  " +
@@ -84,17 +85,15 @@ public class EventTableHandler {
                 DBCreator.KEY_UPVOTES +
                 " FROM " + DBCreator.TABLE_EVENTS;
 
-        //EventClass event = new EventClass();
-        ArrayList<HashMap<String, String>> eventList = new ArrayList<HashMap<String, String>>();
+        EventClass event = new EventClass();
+        List<EventClass> eventList = new ArrayList<>();
 
         Cursor cursor = db.rawQuery(selectQuery, null);
         // looping through all rows and adding to list
 
         if (cursor.moveToFirst()) {
             do {
-                HashMap<String, String> event = new HashMap<String, String>();
-                event.put("id", cursor.getString(cursor.getColumnIndex(DBCreator.KEY_EVENTID)));
-                event.put("name", cursor.getString(cursor.getColumnIndex(DBCreator.KEY_TITLE)));
+                event = new EventClass();
                 event.setEventID(cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_EVENTID)));
                 event.setTitle(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_TITLE)));
                 event.setDescr(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_DESCR)));
@@ -113,7 +112,7 @@ public class EventTableHandler {
         DatabaseManager.getInstance().closeDatabase();
         return eventList;
 
-    } */
+    }
 
     public EventClass getEventById(int Id){
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();

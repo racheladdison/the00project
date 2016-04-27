@@ -25,6 +25,7 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <application
+        android:name=".DataContext"
         android:allowBackup="true"
         android:icon="@drawable/ic_action_name"
         android:label="cFood"
