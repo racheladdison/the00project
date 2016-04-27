@@ -34,7 +34,7 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SQLiteDatabase db = dbCreator.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         setContentView(R.layout.activity_forum);
         //Declare Toolbar
@@ -47,11 +47,11 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
 
         mTitle = (TextView) myToolbar.findViewById(R.id.toolbar_title);
 
-        forumListView = (ExpandableListView) findViewById( R.id.forumListView);
+        forumListView = (ListView) findViewById( R.id.forumListView);
         //TODO replace this with a database call that creates a list of event objects
 
         // Create ArrayAdapter using the planet list.
-        listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, getEventList(db));
+        listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, getEventList());
 
         // Set each of the the ArrayAdapters as the ListView's adapter
         forumListView.setAdapter( listAdapter );
@@ -68,7 +68,8 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
         navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
     }
 
-    public ArrayList getEventList(SQLiteDatabase db) {
+    public ArrayList getEventList() {
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ArrayList<HashMap<String, String>> eventList = new ArrayList<HashMap<String, String>>();
         Cursor EventCursor = db.rawQuery("SELECT * FROM events", null);
         if (EventCursor.moveToFirst()) {
