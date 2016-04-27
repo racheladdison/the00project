@@ -59,7 +59,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         setSupportActionBar(toolbar);
         //TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         //Load Username, Email, Name from SQL database
-        SQLiteDatabase db = dbCreator.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         profileListView = (ExpandableListView) findViewById( R.id.forumListView);
         profileEmailView = (TextView) findViewById( R.id.email);
