@@ -132,14 +132,13 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
         Log.d("Forum:", "onNavigationItemSelected Invoked");
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        View view = findViewById(id);
 
         if (id == R.id.nav_forum_view) {
-            toForum(view);
+            toForum();
         } else if (id == R.id.nav_map_view) {
             //toMap(view);
         } else if (id == R.id.nav_profile) {
-            toProfile(view);
+            toProfile();
         } else if (id == R.id.nav_sign_out) {
 
         }
@@ -158,19 +157,18 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
         return eventList;
     }
 
-    public void toForum(View view) {
+    public void toForum() {
         Log.d("Forum:", "ForumButtonPressed");
         Intent intent = new Intent(this, Forum.class);
         startActivity(intent);
     }
 
     /*public void toMap(View view) {
-
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
     }*/
 
-    public void toProfile(View view) {
+    public void toProfile() {
         Log.d("Forum:", "ProfileButtonPressed");
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
