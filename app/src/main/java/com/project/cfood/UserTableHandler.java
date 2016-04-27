@@ -118,7 +118,7 @@ public class UserTableHandler {
 
         if (cursor.moveToFirst()) {
             do {
-                user.setUserID(cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_USERUSER)));
+                user.setUserID(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_USERUSER)));
                 user.setName(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_NAME)));
                 user.setEmail(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_EMAIL)));
                 user.setLocation(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_LOCATION)));
