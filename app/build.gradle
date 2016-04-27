@@ -6,7 +6,7 @@ android {
         debug {
             keyAlias 'keystore'
             keyPassword 'qwerty'
-            storeFile file('../keystore.jks')
+            storeFile file('C:/Users/Austin/CS_Projects/Android/the00project/keystore.jks')
             storePassword 'qwerty'
         }
     }
@@ -23,6 +23,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable true
+            signingConfig signingConfigs.debug
+        }
+        debug {
+            signingConfig signingConfigs.debug
         }
     }
 }
@@ -37,6 +42,11 @@ dependencies {
     compile 'com.google.android.gms:play-services-plus:8.4.0'
     compile 'com.android.support:support-v4:23.3.0'
 }
+
+
+
+
+
 
 
 
