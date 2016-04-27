@@ -27,7 +27,6 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Profile Name/Username"
         android:id="@+id/username" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

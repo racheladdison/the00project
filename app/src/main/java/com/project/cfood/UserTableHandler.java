@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Austin Holler on 4/23/2016.
@@ -60,29 +61,31 @@ public class UserTableHandler {
     }
 
     /* Don't know if we'll actually ever need this, it returns a list of users,
-       but I figured I'd add it in because it could eventually be useful
+       but I figured I'd add it in because it could eventually be useful */
 
-    public ArrayList<HashMap<String, String>> getStudentList() {
+    public List<UserClass> getUserList() {
         //Open connection to read only
-        SQLiteDatabase db = dbCreator.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         String selectQuery =  "SELECT  " +
                 DBCreator.KEY_NAME + "," +
                 DBCreator.KEY_EMAIL + "," +
                 DBCreator.KEY_LOCATION + "," +
-                DBCreator.KEY_MYEVENTS +
+                DBCreator.KEY_MYEVENTID +
                 " FROM " + DBCreator.TABLE_USERS;
 
-        //UserClass user = new UserClass();
-        ArrayList<HashMap<String, String>> userList = new ArrayList<HashMap<String, String>>();
+        UserClass user = new UserClass();
+       List<UserClass> userList = new ArrayList<>();
 
         Cursor cursor = db.rawQuery(selectQuery, null);
         // looping through all rows and adding to list
 
         if (cursor.moveToFirst()) {
             do {
-                HashMap<String, String> user = new HashMap<String, String>();
-                user.put("id", cursor.getString(cursor.getColumnIndex(DBCreator.KEY_USERUSER)));
-                user.put("name", cursor.getString(cursor.getColumnIndex(DBCreator.KEY_NAME)));
+                user = new UserClass();
+                user.setName(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_NAME)));
+                user.setEmail(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_EMAIL)));
+                user.setLocation(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_LOCATION)));
+                user.setMyEvents(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_MYEVENTID)));
                 userList.add(user);
 
             } while (cursor.moveToNext());
@@ -92,7 +95,7 @@ public class UserTableHandler {
         DatabaseManager.getInstance().closeDatabase();
         return userList;
 
-    } */
+    }
 
     public UserClass getUserById(int Id){
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();

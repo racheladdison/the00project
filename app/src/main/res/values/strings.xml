@@ -26,9 +26,9 @@
     <string name="title_activity_splash">Splash</string>
     <string name="title_activity_edit_profile">Edit Profile</string>
     <string name="confirm_edit_profile">Confirm</string>
-    <string name="title_activity_profile">cFood Profile</string>
     <string name="sign_out">Sign Out</string>
     <string name="disconnect">Disconnect</string>
+
 
     <string name="signed_in_fmt">Signed in as: %s</string>
     <string name="signed_in">Signed in</string>
@@ -46,6 +46,7 @@
 
     <!-- Google Play Services error for Toast -->
     <string name="play_services_error_fmt">Google Play Services Error: %i</string>
+
 
     <!-- Strings related to Settings -->
 
