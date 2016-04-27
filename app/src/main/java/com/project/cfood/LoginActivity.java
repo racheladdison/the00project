@@ -75,8 +75,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Views
-        // Button listeners
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
         findViewById(R.id.disconnect_button).setOnClickListener(this);
@@ -187,7 +185,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     }
                 });
     }
-    // [END signOut]
 
     // [START revokeAccess]
     private void revokeAccess() {
@@ -213,6 +210,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public static GoogleApiClient getApiClient() {
         return mGoogleApiClient;
     }
+    // [END revokeAccess]
 
     public static GoogleSignInResult getSignInResult() {
         return result;
