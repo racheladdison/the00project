@@ -6,11 +6,7 @@ android {
         debug {
             keyAlias 'keystore'
             keyPassword 'qwerty'
-<<<<<<< HEAD
             storeFile file('../keystore.jks')
-=======
-            storeFile file('/Users/rachellewis/AndroidStudioProjects/the00project/keystore.jks')
->>>>>>> 8ef309c82702912492ab2ee17eae0ede4af6b0e1
             storePassword 'qwerty'
         }
     }
