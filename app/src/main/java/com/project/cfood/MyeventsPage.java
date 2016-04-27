@@ -15,8 +15,8 @@ public class MyeventsPage{
         this.pageID = userID;
 
     }
-    public void createEvent(int EventID,int userID, String name, String description, String location, String time) {
-        EventClass food = new EventClass(EventID,name, description, location, time, userID);
+    public void createEvent(String EventID, String userID, String name, String description, String location, String time) {
+        EventClass food = new EventClass(EventID, name, description, location, time, userID);
         myEvents.add(food);
     }
     public void addToFavorites(EventClass EventName){

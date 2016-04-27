@@ -25,12 +25,15 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class Forum extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ListView forumListView ;
     private ArrayAdapter<String> listAdapter ;
     private DBCreator dbCreator;
     private TextView mTitle;
+    private EventTableHandler eventTable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,14 +47,14 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
         // Remove default title text
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         // Get access to the custom title view
-
+        eventTable = new EventTableHandler();
         mTitle = (TextView) myToolbar.findViewById(R.id.toolbar_title);
 
         forumListView = (ListView) findViewById( R.id.forumListView);
         //TODO replace this with a database call that creates a list of event objects
 
         // Create ArrayAdapter using the planet list.
-        listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, getEventList());
+        listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, getEventList(eventTable));
 
         // Set each of the the ArrayAdapters as the ListView's adapter
         forumListView.setAdapter( listAdapter );
@@ -66,25 +69,6 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
-    }
-
-    public ArrayList getEventList() {
-        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
-        ArrayList<HashMap<String, String>> eventList = new ArrayList<HashMap<String, String>>();
-        Cursor EventCursor = db.rawQuery("SELECT * FROM events", null);
-        if (EventCursor.moveToFirst()) {
-            do {
-                HashMap<String, String> events = new HashMap<String, String>();
-                events.put("title", EventCursor.getString(EventCursor.getColumnIndex("title")));
-                events.put("location", EventCursor.getString(EventCursor.getColumnIndex("title")));
-                events.put("description", EventCursor.getString(EventCursor.getColumnIndex("description")));
-                events.put("time", EventCursor.getString(EventCursor.getColumnIndex("time")));
-                events.put("user", EventCursor.getString(EventCursor.getColumnIndex("user")));
-                eventList.add(events);
-            }
-            while (EventCursor.moveToNext());
-        }
-        return eventList;
     }
 
     @Override
@@ -116,6 +100,15 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public List<String> getEventList(EventTableHandler eventTable) {
+        List<String> eventList = new ArrayList<String>();
+        List<EventClass> tempList = eventTable.getEventList();
+        for (int i = 0; i<eventTable.getEventList().size(); i++) {
+            eventList.add(tempList.get(i).getTitle());
+        }
+        return eventList;
     }
 
     public void toForum(View view) {
