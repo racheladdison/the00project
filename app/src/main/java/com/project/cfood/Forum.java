@@ -70,7 +70,7 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
