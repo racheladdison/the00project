@@ -65,7 +65,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 9001;
 
-    private GoogleApiClient mGoogleApiClient;
+    private static GoogleApiClient mGoogleApiClient;
+    private static GoogleSignInResult result;
     private TextView mStatusTextView;
     private ProgressDialog mProgressDialog;
 
@@ -145,7 +146,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
             Log.d(TAG, "LOGGED IN!");
         }
@@ -207,6 +208,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         // An unresolvable error has occurred and Google APIs (including Sign-In) will not
         // be available.
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
+    }
+
+    public static GoogleApiClient getApiClient() {
+        return mGoogleApiClient;
+    }
+
+    public static GoogleSignInResult getSignInResult() {
+        return result;
     }
 
     private void showProgressDialog() {

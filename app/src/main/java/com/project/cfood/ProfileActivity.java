@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class ProfileActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
+public class ProfileActivity extends AppCompatActivity {
     private ListView profileListView ;
     private ArrayAdapter<String> listAdapter ;
     private TextView profileEmailView;
@@ -61,6 +61,8 @@ public class ProfileActivity extends AppCompatActivity implements GoogleApiClien
         button = (Button) findViewById( R.id.edit_profile);
 
         //Access google signin
+
+        /*
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(new Scope(Scopes.PLUS_LOGIN))
                 .requestEmail()
@@ -71,6 +73,11 @@ public class ProfileActivity extends AppCompatActivity implements GoogleApiClien
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
         signIn();
+        */
+
+        mGoogleAPIClient = LoginActivity.getApiClient();
+        acct = LoginActivity.getSignInResult().getSignInAccount();
+
 
         Cursor res = db.rawQuery("SELECT * FROM users WHERE id="+acct.getIdToken()+"", null);
 
@@ -89,21 +96,6 @@ public class ProfileActivity extends AppCompatActivity implements GoogleApiClien
             }
         });
         //profileImageView.setImageResource();
-    }
-
-    private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleAPIClient);
-        startActivityForResult(signInIntent, 9001);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 9001) {
-            result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            acct = result.getSignInAccount();
-        }
     }
 
     public ArrayList getEventList(SQLiteDatabase db, Cursor UserCursor) {
@@ -127,11 +119,5 @@ public class ProfileActivity extends AppCompatActivity implements GoogleApiClien
     public void toForum(View view) {
         Intent intent = new Intent(this, Forum.class);
         startActivity(intent);
-    }
-
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 }
