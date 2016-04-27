@@ -52,7 +52,7 @@ public class ProfileActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //Load Username, Email, Name from SQL database
-        SQLiteDatabase db = dbCreator.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         profileListView = (ExpandableListView) findViewById( R.id.forumListView);
         profileEmailView = (TextView) findViewById( R.id.email);
