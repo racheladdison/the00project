@@ -50,6 +50,8 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
         eventTable = new EventTableHandler();
         mTitle = (TextView) myToolbar.findViewById(R.id.toolbar_title);
 
+        createSamples();
+
         forumListView = (ListView) findViewById( R.id.forumListView);
         //TODO replace this with a database call that creates a list of event objects
 
@@ -124,6 +126,53 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
     public void toProfile(View view) {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
+    }
+
+    private void createSamples() {
+
+        EventTableHandler eventTable = new EventTableHandler();
+        EventClass event = new EventClass();
+
+        eventTable.deleteTable();
+
+        event.setEventID("1a85shyx");
+        event.setTitle("Jesus & Chips @ 4pm UMC");
+        event.setDescr("Come hang out with our main man Jesus today at the UCB on campus! " +
+                "You know what's up, there will be plenty of fish and chips because our man provides.");
+        event.setAddress("University Memorial Center, Boulder, CO 80302");
+        event.setTime("April 27, 2016");
+        event.setUserID("7shensy675walmc24");
+        event.setReportedCount(0);
+        event.setActive(1);
+        event.setUpVotes(1);
+
+        eventTable.insertEvent(event);
+
+        event.setEventID("37shfoe3");
+        event.setTitle("Lucifer & Crucifer @ 4pm Engineering Center");
+        event.setDescr("Lets be honest, Lucifer her and I'll be serving up mad Cruciferous veges today! " +
+                " Why would you go hang out with my lame brother when I'm dishing it out w/mad sin on the side?!" +
+                " You know what to do, and if you don't we'll be hanging out soon enough anyway.");
+        event.setAddress("Engineering Center, Engineering Drive, Boulder, CO");
+        event.setTime("April 27, 2016");
+        event.setUserID("7shensy666walmc24");
+        event.setReportedCount(0);
+        event.setActive(1);
+        event.setUpVotes(1);
+
+        eventTable.insertEvent(event);
+
+        event.setEventID("ax874yte");
+        event.setTitle("Barney & Friends @ 4:05pm Imig Music");
+        event.setDescr("Hands down this is the event you've been waiting for! Some other event to go to?" +
+                        " Skip it, you won't ever get this chance again! Who could really be better...?");
+        event.setTime("April 27, 2016");
+        event.setUserID("jd9hdfa47923jsdfh");
+        event.setReportedCount(0);
+        event.setActive(1);
+        event.setUpVotes(1);
+
+        eventTable.insertEvent(event);
     }
 /*
     public void toSignOut(View view) {
