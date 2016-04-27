@@ -1,10 +1,12 @@
 package com.project.cfood;
 
 import android.content.Intent;
-import android.database.Cursor;
+
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import android.database.Cursor;
+
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -29,9 +33,11 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class ProfileActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener, NavigationView.OnNavigationItemSelectedListener {
@@ -55,8 +61,6 @@ public class ProfileActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         //TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         //Load Username, Email, Name from SQL database
-
-        //Load Username, Email, Name from SQL database
         SQLiteDatabase db = dbCreator.getReadableDatabase();
 
         profileListView = (ExpandableListView) findViewById( R.id.forumListView);
@@ -66,7 +70,7 @@ public class ProfileActivity extends AppCompatActivity
         button = (Button) findViewById( R.id.edit_profile);
 
         //Access google signin
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        /*GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(new Scope(Scopes.PLUS_LOGIN))
                 .requestEmail()
                 .build();
@@ -76,6 +80,9 @@ public class ProfileActivity extends AppCompatActivity
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
         signIn();
+*/
+        mGoogleAPIClient = LoginActivity.getApiClient();
+        acct = LoginActivity.getSignInResult().getSignInAccount();
 
         Cursor res = db.rawQuery("SELECT * FROM users WHERE id="+acct.getIdToken()+"", null);
 
@@ -105,21 +112,6 @@ public class ProfileActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
     }
 
-    private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleAPIClient);
-        startActivityForResult(signInIntent, 9001);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 9001) {
-            result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            acct = result.getSignInAccount();
-        }
-    }
-
     public ArrayList getEventList(SQLiteDatabase db, Cursor UserCursor) {
         ArrayList<HashMap<String, String>> eventList = new ArrayList<HashMap<String, String>>();
         Cursor EventCursor = db.rawQuery("SELECT * FROM events WHERE id="+UserCursor.getColumnIndex("myEvents")+"", null);
@@ -142,18 +134,7 @@ public class ProfileActivity extends AppCompatActivity
         Intent intent = new Intent(this, Forum.class);
         startActivity(intent);
     }
-
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    public void toRegister(View view) {
-        Intent intent = new Intent(this, RegisterActivity.class);
-        startActivity(intent);
-    }
-
+            
     public void toMap(View view) {
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
@@ -201,3 +182,4 @@ public class ProfileActivity extends AppCompatActivity
     }
 
 }
+

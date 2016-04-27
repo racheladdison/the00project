@@ -36,9 +36,10 @@
             android:id="@+id/forumListView"
             android:layout_below="@+id/my_toolbar"
             android:layout_alignParentEnd="true"
-            android:textFilterEnabled="false"/>
+            android:textFilterEnabled="false" />
 
     </android.support.v4.widget.DrawerLayout>
+
 
 </RelativeLayout>
 

@@ -12,7 +12,7 @@ public class DBCreator extends SQLiteOpenHelper {
     // Database Version
     public static final int DATABASE_VERSION = 1;
     // Database Name
-    public static final String DATABASE_NAME = "cfoodInfo";
+    public static final String DATABASE_NAME = "cFoodInfo.db";
 
     // Users table name
     public static final String TABLE_USERS = "users";
@@ -21,7 +21,7 @@ public class DBCreator extends SQLiteOpenHelper {
     public static final String KEY_NAME = "name";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_LOCATION = "location";
-    public static final String KEY_MYEVENTS = "myEvents";
+    public static final String KEY_MYEVENTID = "myEventId";
 
     // Events table name
     public static final String TABLE_EVENTS = "events";
@@ -36,16 +36,14 @@ public class DBCreator extends SQLiteOpenHelper {
     public static final String KEY_ACTIVE = "active";
     public static final String KEY_UPVOTES = "upvotes";
 
-    public DBCreator(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
+    public DBCreator() {super(DataContext.getContext(), DATABASE_NAME, null, DATABASE_VERSION);}
 
     @Override
     public void onCreate(SQLiteDatabase db) {
 
         String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + "("
                 + KEY_USERUSER + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-                + KEY_EMAIL + "TEXT" + KEY_LOCATION + " TEXT" + KEY_MYEVENTS
+                + KEY_EMAIL + "TEXT" + KEY_LOCATION + " TEXT" + KEY_MYEVENTID
                 + "TEXT" + ")";
         db.execSQL(CREATE_USERS_TABLE);
 
