@@ -14,7 +14,6 @@ import android.text.TextUtils;
 
 //TODO make userclass private
 public class UserClass {
-    private String password;
     private String userID;
     private String name;
     private String email;
