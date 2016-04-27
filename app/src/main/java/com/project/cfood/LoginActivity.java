@@ -233,7 +233,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void updateUI(boolean signedIn) {
+        Log.d(TAG, "Made it inside of updateUI");
         if (signedIn) {
+            Log.d(TAG, "Made it inside of updateUI signedIn");
             Intent intent = new Intent(this, Forum.class);
             startActivity(intent);
         } else {
