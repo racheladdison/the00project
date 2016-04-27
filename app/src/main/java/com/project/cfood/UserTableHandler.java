@@ -5,9 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -15,50 +13,50 @@ import java.util.HashMap;
  */
 public class UserTableHandler {
 
-    private DBCreator dbCreator;
+    private UserClass user;
 
-    public UserTableHandler(Context context){
-        dbCreator = new DBCreator(context);
+    public UserTableHandler(){
+        user = new UserClass();
     }
 
     public int insertUser(UserClass user) {
 
-        SQLiteDatabase db = dbCreator.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values = new ContentValues();
 
         values.put(DBCreator.KEY_USERUSER, user.getUserID());
         values.put(DBCreator.KEY_NAME, user.getName());
         values.put(DBCreator.KEY_EMAIL, user.getEmail());
         values.put(DBCreator.KEY_LOCATION, user.getLocation());
-        values.put(DBCreator.KEY_MYEVENTID, user.getStringEvents());
+        values.put(DBCreator.KEY_MYEVENTID, user.getMyEvents());
 
         // Inserting Row
         long user_Id = db.insert(DBCreator.TABLE_USERS, null, values);
-        db.close(); // Closing database connection
+        DatabaseManager.getInstance().closeDatabase(); // Closing database connection
         return (int) user_Id;
     }
 
-    public void delete(String user_Id) {
+    public void delete(int user_Id) {
 
-        SQLiteDatabase db = dbCreator.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         // It's a good practice to use parameter ?, instead of concatenate string
         db.delete(DBCreator.TABLE_USERS, DBCreator.KEY_USERUSER + "= ?", new String[] { String.valueOf(user_Id) });
-        db.close(); // Closing database connection
+        DatabaseManager.getInstance().closeDatabase(); // Closing database connection
     }
 
     public void update(UserClass user) {
 
-        SQLiteDatabase db = dbCreator.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values = new ContentValues();
 
         values.put(DBCreator.KEY_NAME, user.getName());
         values.put(DBCreator.KEY_EMAIL, user.getEmail());
         values.put(DBCreator.KEY_LOCATION, user.getLocation());
-        values.put(DBCreator.KEY_MYEVENTID, user.getStringEvents());
+        values.put(DBCreator.KEY_MYEVENTID, user.getMyEvents());
 
         // It's a good practice to use parameter ?, instead of concatenate string
         db.update(DBCreator.TABLE_USERS, values, DBCreator.KEY_USERUSER + "= ?", new String[] { String.valueOf(user.getUserID()) });
-        db.close(); // Closing database connection
+        DatabaseManager.getInstance().closeDatabase(); // Closing database connection
     }
 
     /* Don't know if we'll actually ever need this, it returns a list of users,
@@ -91,13 +89,13 @@ public class UserTableHandler {
         }
 
         cursor.close();
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
         return userList;
 
     } */
 
-    public UserClass getUserById(String Id){
-        SQLiteDatabase db = dbCreator.getReadableDatabase();
+    public UserClass getUserById(int Id){
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         String selectQuery =  "SELECT  " +
                 DBCreator.KEY_NAME + "," +
                 DBCreator.KEY_EMAIL + "," +
@@ -116,17 +114,13 @@ public class UserTableHandler {
                 user.setName(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_NAME)));
                 user.setEmail(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_EMAIL)));
                 user.setLocation(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_LOCATION)));
-
-                //Parse myEvents to an ArrayList before inserting it into the User Class
-                String s = cursor.getString(cursor.getColumnIndex(DBCreator.KEY_MYEVENTID));
-                ArrayList<String> myList = new ArrayList<String>(Arrays.asList(s.split(",")));
-                user.setMyEvents(myList);
+                user.setMyEvents(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_MYEVENTID)));
 
             } while (cursor.moveToNext());
         }
 
         cursor.close();
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
         return user;
     }
 
