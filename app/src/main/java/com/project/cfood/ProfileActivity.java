@@ -15,6 +15,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.ViewDebug;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -33,11 +34,11 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Scope;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,GoogleApiClient.OnConnectionFailedListener {
     private ListView profileListView ;
-    private ArrayAdapter<String> listAdapter ;
     private TextView profileEmailView;
     private TextView profileUsernameView;
     private ImageView profileImageView;
@@ -59,13 +60,15 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         //Load Username, Email, Name from SQL database
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
-        profileListView = (ListView) findViewById( R.id.forumListView);
+        profileListView = (ListView) findViewById( R.id.profileListView);
         profileEmailView = (TextView) findViewById( R.id.email);
         profileUsernameView = (TextView) findViewById( R.id.username);
         profileImageView = (ImageView) findViewById( R.id.userphoto);
         button = (Button) findViewById( R.id.edit_profile);
         userTable = new UserTableHandler();
         eventTable = new EventTableHandler();
+
+        createSample();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(new Scope(Scopes.PLUS_LOGIN))
@@ -75,6 +78,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+
 
         OptionalPendingResult<GoogleSignInResult> pendingResult =
                 Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
@@ -93,13 +97,16 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
             });
         }
         Log.d("ProfileActivity", "ID: "+acct.getId());
+        //GoogleApiClient mGoogleAPIClient = LoginActivity.getApiClient();
+        //GoogleSignInAccount acct = LoginActivity.getSignInResult().getSignInAccount();
 
-        user = userTable.getUserById(acct.getId()+"");
+        user = userTable.getUserById("7shensy675walmc24");//acct.getIdToken());
 
         Log.d("ProfileActivity", "Email: "+user.getEmail());
         Log.d("ProfileActivity", "UserID:" + user.getUserID());
         // Create ArrayAdapter using the event list.
-        listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, getEventList(user, eventTable));
+        ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, getEventList(user, eventTable));
+
 
         // Set each of the the ArrayAdapters as the ListView's adapter
         profileListView.setAdapter( listAdapter );
@@ -142,10 +149,21 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     public ArrayList<String> getEventList(UserClass user, EventTableHandler eventTable) {
         Log.d("ProfileActivity", "RUNNING INTO THE LIST");
         ArrayList<String> eventList = new ArrayList<String>();
-            for (int i = 0; i < user.getArrayListEvents().size(); i++) {
-                eventList.add(eventTable.getEventById(user.getArrayListEvents().get(i)).getTitle());
-            }
-            return eventList;
+
+        List<EventClass> eventLister = new ArrayList<>();
+
+        eventLister = eventTable.getEventList();
+
+        for (int i = 0; i<eventLister.size(); i++) {
+
+            Log.d("Event", eventLister.get(i).getTitle());
+            eventList.add(eventLister.get(i).getTitle());
+        }
+
+        /*for (int i = 0; i<user.getArrayListEvents().size(); i++) {
+            eventList.add(eventTable.getEventById(user.getArrayListEvents().get(i)).getTitle());
+        }*/
+        return eventList;
     }
     public void toForum() {
         Intent intent = new Intent(this, Forum.class);
@@ -190,6 +208,30 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void createSample() {
+        UserTableHandler userTable = new UserTableHandler();
+        UserClass user = new UserClass();
+
+        userTable.deleteTable();
+
+        user.setUserID("7shensy675walmc24");
+        user.setName("Jesus");
+        user.setLocation("Boulder, CO");
+        user.setEmail("jesus_lives@aol.com");
+        user.setReputation(777);
+
+        ArrayList<String> myEventsArray = new ArrayList<>();
+        myEventsArray.add("1a85shyx");
+        myEventsArray.add("37shfoe3");
+        myEventsArray.add("ax874yte");
+
+        Log.d("myEventsArray Size", Integer.toString(myEventsArray.size()));
+
+        user.setMyEvents(myEventsArray);
+
+        userTable.insertUser(user);
     }
 
     @Override
