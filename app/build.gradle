@@ -6,7 +6,11 @@ android {
         debug {
             keyAlias 'keystore'
             keyPassword 'qwerty'
+<<<<<<< HEAD
             storeFile file('../keystore.jks')
+=======
+            storeFile file('/Users/rachellewis/AndroidStudioProjects/the00project/keystore.jks')
+>>>>>>> 8ef309c82702912492ab2ee17eae0ede4af6b0e1
             storePassword 'qwerty'
         }
     }
@@ -33,7 +37,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
@@ -43,6 +47,5 @@ dependencies {
     compile 'com.android.support:support-v4:23.3.0'
     compile files('Libs/gson-2.6.2.jar')
 }
-
 
 apply plugin: 'com.google.gms.google-services'

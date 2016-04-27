@@ -88,7 +88,6 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(new Scope(Scopes.PLUS_LOGIN))
@@ -115,6 +114,7 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
                 }
             });
         }
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -137,7 +137,7 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
         if (id == R.id.nav_forum_view) {
             toForum(view);
         } else if (id == R.id.nav_map_view) {
-            toMap(view);
+            //toMap(view);
         } else if (id == R.id.nav_profile) {
             toProfile(view);
         } else if (id == R.id.nav_sign_out) {
@@ -164,11 +164,11 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
         startActivity(intent);
     }
 
-    public void toMap(View view) {
-        Log.d("Forum:", "MapsButtonPressed");
+    /*public void toMap(View view) {
+
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
-    }
+    }*/
 
     public void toProfile(View view) {
         Log.d("Forum:", "ProfileButtonPressed");
