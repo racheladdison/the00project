@@ -75,15 +75,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //Declare Toolbar
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        //Set the use of custom toolbar
-        setSupportActionBar(myToolbar);
-        // Remove default title text
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        // Get access to the custom title view
-        TextView mTitle = (TextView) myToolbar.findViewById(R.id.toolbar_title);
-
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
         findViewById(R.id.disconnect_button).setOnClickListener(this);
