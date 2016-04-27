@@ -93,7 +93,11 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
             });
         }
         Log.d("ProfileActivity", "ID: "+acct.getId());
+
         user = userTable.getUserById(acct.getId()+"");
+
+        Log.d("ProfileActivity", "Email: "+user.getEmail());
+        Log.d("ProfileActivity", "UserID:" + user.getUserID());
         // Create ArrayAdapter using the event list.
         listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, getEventList(user, eventTable));
 
@@ -136,11 +140,12 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     }
 
     public ArrayList<String> getEventList(UserClass user, EventTableHandler eventTable) {
+        Log.d("ProfileActivity", "RUNNING INTO THE LIST");
         ArrayList<String> eventList = new ArrayList<String>();
-        for (int i = 0; i<user.getArrayListEvents().size(); i++) {
-            eventList.add(eventTable.getEventById(user.getArrayListEvents().get(i)).getTitle());
-        }
-        return eventList;
+            for (int i = 0; i < user.getArrayListEvents().size(); i++) {
+                eventList.add(eventTable.getEventById(user.getArrayListEvents().get(i)).getTitle());
+            }
+            return eventList;
     }
     public void toForum(View view) {
         Intent intent = new Intent(this, Forum.class);

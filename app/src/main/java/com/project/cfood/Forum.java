@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -81,8 +82,9 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
             super.onBackPressed();
         }
     }
-    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        Log.d("Forum:", "onNavigationItemSelected Invoked");
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         View view = findViewById(id);
@@ -112,16 +114,19 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
     }
 
     public void toForum(View view) {
+        Log.d("Forum:", "ForumButtonPressed");
         Intent intent = new Intent(this, Forum.class);
         startActivity(intent);
     }
 
     public void toMap(View view) {
+        Log.d("Forum:", "MapsButtonPressed");
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
     }
 
     public void toProfile(View view) {
+        Log.d("Forum:", "ProfileButtonPressed");
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }

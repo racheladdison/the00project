@@ -110,7 +110,7 @@ public class UserTableHandler {
                 DBCreator.KEY_LOCATION + "," +
                 DBCreator.KEY_MYEVENTID +
                 " FROM " + DBCreator.TABLE_USERS +
-                " WHERE " + DBCreator.KEY_USERUSER + "=?";// It's a good practice to use parameter ?, instead of concatenate string
+                " WHERE " + DBCreator.KEY_USERUSER + "="+Id;// It's a good practice to use parameter ?, instead of concatenate string
 
         UserClass user = new UserClass();
 
