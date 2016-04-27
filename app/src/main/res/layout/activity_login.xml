@@ -38,7 +38,7 @@
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
             android:layout_gravity="start" />
 
-        </android.support.v7.widget.Toolbar>
+    </android.support.v7.widget.Toolbar>
 
     <ScrollView
         android:id="@+id/login_form"
