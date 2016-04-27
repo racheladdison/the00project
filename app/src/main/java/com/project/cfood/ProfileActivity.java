@@ -25,7 +25,7 @@ import com.google.android.gms.common.api.Scope;
 import java.util.ArrayList;
 
 
-public class ProfileActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
+public class ProfileActivity extends AppCompatActivity{
     private ListView profileListView ;
     private ArrayAdapter<String> listAdapter ;
     private TextView profileEmailView;
@@ -49,25 +49,16 @@ public class ProfileActivity extends AppCompatActivity implements GoogleApiClien
         //Load Username, Email, Name from SQL database
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
-        profileListView = (ExpandableListView) findViewById( R.id.forumListView);
+        profileListView = (ListView) findViewById( R.id.forumListView);
         profileEmailView = (TextView) findViewById( R.id.email);
         profileUsernameView = (TextView) findViewById( R.id.username);
         profileImageView = (ImageView) findViewById( R.id.userphoto);
         button = (Button) findViewById( R.id.edit_profile);
-        userTable = new UserTableHandler(this);
-        eventTable = new EventTableHandler(this);
+        userTable = new UserTableHandler();
+        eventTable = new EventTableHandler();
 
-        //Access google signin
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
-                .requestEmail()
-                .build();
-
-        mGoogleAPIClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-        signIn();
+        GoogleApiClient mGoogleAPIClient = LoginActivity.getApiClient();
+        GoogleSignInAccount acct = LoginActivity.getSignInResult().getSignInAccount();
 
         user = userTable.getUserById(acct.getIdToken());
 
@@ -88,31 +79,11 @@ public class ProfileActivity extends AppCompatActivity implements GoogleApiClien
         //profileImageView.setImageResource();
     }
 
-    private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleAPIClient);
-        startActivityForResult(signInIntent, 9001);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 9001) {
-            result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            acct = result.getSignInAccount();
-        }
-    }
-
     public ArrayList<String> getEventList(UserClass user, EventTableHandler eventTable) {
         ArrayList<String> eventList = new ArrayList<String>();
         for (int i = 0; i<user.getArrayListEvents().size(); i++) {
             eventList.add(eventTable.getEventById(user.getArrayListEvents().get(i)).getTitle());
         }
         return eventList;
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 }
