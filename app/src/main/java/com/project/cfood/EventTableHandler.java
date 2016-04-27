@@ -153,4 +153,10 @@ public class EventTableHandler {
         return event;
     }
 
+    public void deleteTable( ) {
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        db.delete(DBCreator.TABLE_EVENTS, null,null);
+        DatabaseManager.getInstance().closeDatabase();
+    }
+
 }
