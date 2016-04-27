@@ -135,4 +135,10 @@ public class UserTableHandler {
         return user;
     }
 
+    public void deleteTable( ) {
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        db.delete(DBCreator.TABLE_USERS, null,null);
+        DatabaseManager.getInstance().closeDatabase();
+    }
+
 }
