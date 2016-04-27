@@ -61,7 +61,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         //Load Username, Email, Name from SQL database
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
-        profileListView = (ExpandableListView) findViewById( R.id.forumListView);
+        profileListView = (ListView) findViewById( R.id.forumListView);
         profileEmailView = (TextView) findViewById( R.id.email);
         profileUsernameView = (TextView) findViewById( R.id.username);
         profileImageView = (ImageView) findViewById( R.id.userphoto);

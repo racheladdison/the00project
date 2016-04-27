@@ -47,6 +47,8 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
 
         mTitle = (TextView) myToolbar.findViewById(R.id.toolbar_title);
 
+        createSomeEvents();
+
         forumListView = (ListView) findViewById( R.id.forumListView);
         //TODO replace this with a database call that creates a list of event objects
 
@@ -66,6 +68,15 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
+    }
+
+    private void createSomeEvents(){
+
+        EventTableHandler eventHandler = new EventTableHandler();
+        EventClass event = new EventClass();
+
+
+
     }
 
     public ArrayList getEventList() {
