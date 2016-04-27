@@ -105,7 +105,7 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
     public List<String> getEventList(EventTableHandler eventTable) {
         List<String> eventList = new ArrayList<String>();
         List<EventClass> tempList = eventTable.getEventList();
-        for (int i = 0; i<eventTable.getEventList().size(); i++) {
+        for (int i = 0; i<tempList.size(); i++) {
             eventList.add(tempList.get(i).getTitle());
         }
         return eventList;

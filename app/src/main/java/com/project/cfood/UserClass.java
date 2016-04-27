@@ -15,7 +15,7 @@ import android.text.TextUtils;
 //TODO make userclass private
 public class UserClass {
     private String password;
-    private int userID;
+    private String userID;
     private String name;
     private String email;
     private String location;
@@ -23,7 +23,7 @@ public class UserClass {
     private Integer reputation;
     public UserClass() {}
 
-    public UserClass(int userID, String name, String email, String location, ArrayList<String> myEvents) {
+    public UserClass(String userID, String name, String email, String location, ArrayList<String> myEvents) {
         this.userID = userID;
         this.name = name;
         this.location = location;
@@ -31,7 +31,7 @@ public class UserClass {
         this.myEvents = myEvents;
     }
 
-    public void setUserID(int userID) {
+    public void setUserID(String userID) {
         this.userID = userID;
     }
 
@@ -53,7 +53,7 @@ public class UserClass {
         this.reputation = reputation;
     }
 
-    public int getUserID() {
+    public String getUserID() {
         return userID;
     }
 
