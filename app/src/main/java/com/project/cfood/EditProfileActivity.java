@@ -45,7 +45,7 @@ public class EditProfileActivity extends AppCompatActivity implements GoogleApiC
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(new Scope(Scopes.PLUS_LOGIN))
-                .requestEmail()
+                .requestId()
                 .build();
         GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
@@ -69,7 +69,7 @@ public class EditProfileActivity extends AppCompatActivity implements GoogleApiC
             });
 
 
-            user = userTable.getUserById(acct.getIdToken());
+            user = userTable.getUserById(acct.getId());
             attemptEditProfile(user, userTable);
 
             //TODO check to make sure the edit's are legal before changing back to profile
