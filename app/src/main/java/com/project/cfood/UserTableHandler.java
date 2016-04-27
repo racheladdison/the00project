@@ -13,15 +13,15 @@ import java.util.HashMap;
  */
 public class UserTableHandler {
 
-    private DBCreator dbCreator;
+    private UserClass user;
 
-    public UserTableHandler(Context context){
-        dbCreator = new DBCreator(context);
+    public UserTableHandler(){
+        user = new UserClass();
     }
 
     public int insertUser(UserClass user) {
 
-        SQLiteDatabase db = dbCreator.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values = new ContentValues();
 
         values.put(DBCreator.KEY_USERUSER, user.getUserID());
@@ -32,21 +32,21 @@ public class UserTableHandler {
 
         // Inserting Row
         long user_Id = db.insert(DBCreator.TABLE_USERS, null, values);
-        db.close(); // Closing database connection
+        DatabaseManager.getInstance().closeDatabase(); // Closing database connection
         return (int) user_Id;
     }
 
     public void delete(int user_Id) {
 
-        SQLiteDatabase db = dbCreator.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         // It's a good practice to use parameter ?, instead of concatenate string
         db.delete(DBCreator.TABLE_USERS, DBCreator.KEY_USERUSER + "= ?", new String[] { String.valueOf(user_Id) });
-        db.close(); // Closing database connection
+        DatabaseManager.getInstance().closeDatabase(); // Closing database connection
     }
 
     public void update(UserClass user) {
 
-        SQLiteDatabase db = dbCreator.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values = new ContentValues();
 
         values.put(DBCreator.KEY_NAME, user.getName());
@@ -56,7 +56,7 @@ public class UserTableHandler {
 
         // It's a good practice to use parameter ?, instead of concatenate string
         db.update(DBCreator.TABLE_USERS, values, DBCreator.KEY_USERUSER + "= ?", new String[] { String.valueOf(user.getUserID()) });
-        db.close(); // Closing database connection
+        DatabaseManager.getInstance().closeDatabase(); // Closing database connection
     }
 
     /* Don't know if we'll actually ever need this, it returns a list of users,
@@ -89,13 +89,13 @@ public class UserTableHandler {
         }
 
         cursor.close();
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
         return userList;
 
     } */
 
     public UserClass getUserById(int Id){
-        SQLiteDatabase db = dbCreator.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         String selectQuery =  "SELECT  " +
                 DBCreator.KEY_NAME + "," +
                 DBCreator.KEY_EMAIL + "," +
@@ -120,7 +120,7 @@ public class UserTableHandler {
         }
 
         cursor.close();
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
         return user;
     }
 

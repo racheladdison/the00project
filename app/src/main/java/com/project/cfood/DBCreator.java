@@ -12,7 +12,7 @@ public class DBCreator extends SQLiteOpenHelper {
     // Database Version
     public static final int DATABASE_VERSION = 1;
     // Database Name
-    public static final String DATABASE_NAME = "cfoodInfo";
+    public static final String DATABASE_NAME = "cFoodInfo.db";
 
     // Users table name
     public static final String TABLE_USERS = "users";
@@ -36,9 +36,7 @@ public class DBCreator extends SQLiteOpenHelper {
     public static final String KEY_ACTIVE = "active";
     public static final String KEY_UPVOTES = "upvotes";
 
-    public DBCreator(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
+    public DBCreator() {super(DataContext.getContext(), DATABASE_NAME, null, DATABASE_VERSION);}
 
     @Override
     public void onCreate(SQLiteDatabase db) {
