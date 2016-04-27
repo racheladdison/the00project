@@ -3,61 +3,47 @@ package com.project.cfood;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.util.Log;
+import android.view.MenuItem;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import android.database.Cursor;
-
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Scope;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+
 
 public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
     private ListView profileListView ;
     private ArrayAdapter<String> listAdapter ;
     private TextView profileEmailView;
     private TextView profileUsernameView;
-    private DBCreator dbCreator;
     private ImageView profileImageView;
     private Button button;
-    private GoogleSignInResult result;
     private GoogleSignInAccount acct;
     private GoogleApiClient mGoogleAPIClient;
+    private EventTableHandler eventTable;
+    private UserTableHandler userTable;
+    private UserClass user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         //Load Username, Email, Name from SQL database
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
@@ -66,31 +52,21 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         profileUsernameView = (TextView) findViewById( R.id.username);
         profileImageView = (ImageView) findViewById( R.id.userphoto);
         button = (Button) findViewById( R.id.edit_profile);
+        userTable = new UserTableHandler();
+        eventTable = new EventTableHandler();
 
-        //Access google signin
-        /*GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
-                .requestEmail()
-                .build();
+        GoogleApiClient mGoogleAPIClient = LoginActivity.getApiClient();
+        GoogleSignInAccount acct = LoginActivity.getSignInResult().getSignInAccount();
 
-        mGoogleAPIClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-        signIn();
-*/
-        mGoogleAPIClient = LoginActivity.getApiClient();
-        acct = LoginActivity.getSignInResult().getSignInAccount();
+        user = userTable.getUserById(acct.getIdToken());
 
-        Cursor res = db.rawQuery("SELECT * FROM users WHERE id="+acct.getIdToken()+"", null);
-
-        // Create ArrayAdapter usig the event list.
-        listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, getEventList(db, res));
+        // Create ArrayAdapter using the event list.
+        listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, getEventList(user, eventTable));
 
         // Set each of the the ArrayAdapters as the ListView's adapter
         profileListView.setAdapter( listAdapter );
-        profileEmailView.setText(res.getString(res.getColumnIndex("email")));
-        profileUsernameView.setText(res.getString(res.getColumnIndex("name")));
+        profileEmailView.setText(user.getEmail());
+        profileUsernameView.setText(user.getUserID());
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,64 +75,46 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
             }
         });
         //profileImageView.setImageResource();
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
+
     }
 
-    public ArrayList getEventList(SQLiteDatabase db, Cursor UserCursor) {
-        ArrayList<HashMap<String, String>> eventList = new ArrayList<HashMap<String, String>>();
-        Cursor EventCursor = db.rawQuery("SELECT * FROM events WHERE id="+UserCursor.getColumnIndex("myEvents")+"", null);
-        if (EventCursor.moveToFirst()) {
-            do {
-                HashMap<String, String> events = new HashMap<String, String>();
-                events.put("title", EventCursor.getString(EventCursor.getColumnIndex("title")));
-                events.put("location", EventCursor.getString(EventCursor.getColumnIndex("title")));
-                events.put("description", EventCursor.getString(EventCursor.getColumnIndex("description")));
-                events.put("time", EventCursor.getString(EventCursor.getColumnIndex("time")));
-                events.put("user", EventCursor.getString(EventCursor.getColumnIndex("user")));
-                eventList.add(events);
-            }
-            while (EventCursor.moveToNext());
+    public ArrayList<String> getEventList(UserClass user, EventTableHandler eventTable) {
+        ArrayList<String> eventList = new ArrayList<String>();
+        for (int i = 0; i<user.getArrayListEvents().size(); i++) {
+            eventList.add(eventTable.getEventById(user.getArrayListEvents().get(i)).getTitle());
         }
         return eventList;
     }
-
     public void toForum(View view) {
         Intent intent = new Intent(this, Forum.class);
         startActivity(intent);
     }
-            
+
     public void toMap(View view) {
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
     }
 
     public void toProfile(View view) {
-        Intent intent = new Intent(this, ProfileActivity.class);
+        Intent intent = new Intent(this, ProfileActivity.class)
         startActivity(intent);
     }
-/*
-    public void toSignOut(View view) {
-        Intent intent = new Intent(this, SignOut.class);
-        startActivity(intent);
-    }*/
-
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+       DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+               super.onBackPressed();
+            }
         }
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -172,11 +130,11 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
             toProfile(view);
         } else if (id == R.id.nav_sign_out) {
 
-        }
+            }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-}
 
+}

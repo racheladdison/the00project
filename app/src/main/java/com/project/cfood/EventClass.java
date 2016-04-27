@@ -4,19 +4,19 @@ package com.project.cfood;
  * Created by Andrew Candelaresi on 4/21/2016.
  */
 public class EventClass {
-    private int eventID;
+    private String eventID;
     private String title;
     private String descr;
     private String address;
     private String time;
-    private int userID;
+    private String userID;
     private int reportedCount;
     private int active;
     protected int upVotes;
 
     public EventClass() {};
 
-    public EventClass(int eventID, String title, String descr, String address, String time, int userID) {
+    public EventClass(String eventID, String title, String descr, String address, String time, String userID) {
         this.eventID = eventID;
         this.title = title;
         this.descr = descr;
@@ -25,7 +25,7 @@ public class EventClass {
         this.userID = userID;
     }
 
-    public void setEventID(int eventID) {
+    public void setEventID(String eventID) {
         this.eventID = eventID;
     }
 
@@ -45,7 +45,7 @@ public class EventClass {
         this.time = time;
     }
 
-    public void setUserID(int userID) {
+    public void setUserID(String userID) {
         this.userID = userID;
     }
 
@@ -61,7 +61,7 @@ public class EventClass {
         this.upVotes = upVotes;
     }
 
-    public int getEventID() {
+    public String getEventID() {
         return eventID;
     }
 
@@ -81,7 +81,7 @@ public class EventClass {
         return time;
     }
 
-    public int getUserID() {
+    public String getUserID() {
         return userID;
     }
 

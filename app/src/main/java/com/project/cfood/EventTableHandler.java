@@ -41,7 +41,7 @@ public class EventTableHandler {
         return (int) event_Id;
     }
 
-    public void delete(int event_Id) {
+    public void delete(String event_Id) {
 
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         // It's a good practice to use parameter ?, instead of concatenate string
@@ -94,12 +94,12 @@ public class EventTableHandler {
         if (cursor.moveToFirst()) {
             do {
                 event = new EventClass();
-                event.setEventID(cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_EVENTID)));
+                event.setEventID(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_EVENTID)));
                 event.setTitle(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_TITLE)));
                 event.setDescr(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_DESCR)));
                 event.setAddress(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_ADDRESS)));
                 event.setTime(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_TIME)));
-                event.setUserID(cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_EVENTUSER)));
+                event.setUserID(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_EVENTUSER)));
                 event.setReportedCount(cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_REPORTED)));
                 event.setActive((cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_ACTIVE))));
                 event.setUpVotes(cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_UPVOTES)));
@@ -114,7 +114,7 @@ public class EventTableHandler {
 
     }
 
-    public EventClass getEventById(int Id){
+    public EventClass getEventById(String Id){
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         String selectQuery =  "SELECT  " +
                 DBCreator.KEY_EVENTID + "," +
@@ -135,12 +135,12 @@ public class EventTableHandler {
 
         if (cursor.moveToFirst()) {
             do {
-                event.setEventID(cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_EVENTID)));
+                event.setEventID(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_EVENTID)));
                 event.setTitle(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_TITLE)));
                 event.setDescr(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_DESCR)));
                 event.setAddress(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_ADDRESS)));
                 event.setTime(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_TIME)));
-                event.setUserID(cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_EVENTUSER)));
+                event.setUserID(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_EVENTUSER)));
                 event.setReportedCount(cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_REPORTED)));
                 event.setActive((cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_ACTIVE))));
                 event.setUpVotes(cursor.getInt(cursor.getColumnIndex(DBCreator.KEY_UPVOTES)));
