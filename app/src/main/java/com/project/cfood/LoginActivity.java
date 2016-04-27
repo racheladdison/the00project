@@ -158,6 +158,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
             Log.d(TAG, "LOGGED IN: "+acct.getEmail() + " " + acct.getId());
+            Intent nextActivity = new Intent(this, ProfileActivity.class);
+            startActivity(nextActivity);
             updateUI(true);
         } else {
             // Signed out, show unauthenticated UI.
@@ -207,15 +209,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
     }
 
-    public static GoogleApiClient getApiClient() {
-        return mGoogleApiClient;
-    }
-    // [END revokeAccess]
-
-    public static GoogleSignInResult getSignInResult() {
-        return result;
-    }
-
     private void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
@@ -236,8 +229,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Log.d(TAG, "Made it inside of updateUI");
         if (signedIn) {
             Log.d(TAG, "Made it inside of updateUI signedIn");
-            Intent intent = new Intent(this, Forum.class);
-            startActivity(intent);
+            findViewById(R.id.sign_in_button).setVisibility(View.GONE);
+            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
         } else {
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);

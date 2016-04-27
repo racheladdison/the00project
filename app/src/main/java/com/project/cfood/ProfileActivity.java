@@ -1,5 +1,6 @@
 package com.project.cfood;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -19,13 +20,22 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Scope;
+
 import java.util.ArrayList;
 
 
-public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,GoogleApiClient.OnConnectionFailedListener {
     private ListView profileListView ;
     private ArrayAdapter<String> listAdapter ;
     private TextView profileEmailView;
@@ -37,6 +47,8 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     private EventTableHandler eventTable;
     private UserTableHandler userTable;
     private UserClass user;
+    private ProgressDialog mProgressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +67,33 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         userTable = new UserTableHandler();
         eventTable = new EventTableHandler();
 
-        GoogleApiClient mGoogleAPIClient = LoginActivity.getApiClient();
-        GoogleSignInAccount acct = LoginActivity.getSignInResult().getSignInAccount();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
+                .requestId()
+                .build();
+        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
 
-        user = userTable.getUserById(acct.getIdToken());
-
+        OptionalPendingResult<GoogleSignInResult> pendingResult =
+                Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+        if (pendingResult.isDone()) {
+                acct = pendingResult.get().getSignInAccount();
+        } else {
+            // There's no immediate result ready, displays some progress indicator and waits for the
+            // async callback.
+            showProgressDialog();
+            pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(@NonNull GoogleSignInResult result) {
+                    acct = result.getSignInAccount();
+                    hideProgressDialog();
+                }
+            });
+        }
+        Log.d("ProfileActivity", "ID: "+acct.getId());
+        user = userTable.getUserById(acct.getId()+"");
         // Create ArrayAdapter using the event list.
         listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, getEventList(user, eventTable));
 
@@ -85,6 +119,22 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
 
     }
 
+    private void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.hide();
+        }
+    }
+
     public ArrayList<String> getEventList(UserClass user, EventTableHandler eventTable) {
         ArrayList<String> eventList = new ArrayList<String>();
         for (int i = 0; i<user.getArrayListEvents().size(); i++) {
@@ -106,6 +156,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
+
     @Override
     public void onBackPressed() {
        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -135,6 +186,13 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+        // be available.
+        Log.d("EditProfileActivity", "onConnectionFailed:" + connectionResult);
     }
 
 }

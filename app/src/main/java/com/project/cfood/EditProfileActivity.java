@@ -1,18 +1,29 @@
 package com.project.cfood;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Scope;
 
 
-public class EditProfileActivity extends AppCompatActivity {
+public class EditProfileActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private Button button;
     private EditText mEmailView;
@@ -21,30 +32,72 @@ public class EditProfileActivity extends AppCompatActivity {
     private GoogleApiClient mGoogleAPIClient;
     private GoogleSignInAccount acct;
     private UserClass user;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
-        button = (Button) findViewById( R.id.confirm_button);
-        mEmailView = (EditText) findViewById( R.id.email);
-        mUserNameView = (EditText) findViewById( R.id.username);
+        button = (Button) findViewById(R.id.confirm_button);
+        mEmailView = (EditText) findViewById(R.id.email);
+        mUserNameView = (EditText) findViewById(R.id.username);
         userTable = new UserTableHandler();
 
-        GoogleApiClient mGoogleAPIClient = LoginActivity.getApiClient();
-        GoogleSignInAccount acct = LoginActivity.getSignInResult().getSignInAccount();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
+                .requestEmail()
+                .build();
+        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
 
-        user = userTable.getUserById(acct.getIdToken());
-        attemptEditProfile(user, userTable);
+        OptionalPendingResult<GoogleSignInResult> pendingResult =
+                Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+        if (pendingResult.isDone()) {
+            acct = pendingResult.get().getSignInAccount();
+        } else {
+            // There's no immediate result ready, displays some progress indicator and waits for the
+            // async callback.
+            showProgressDialog();
+            pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(@NonNull GoogleSignInResult result) {
+                    acct = result.getSignInAccount();
+                    hideProgressDialog();
+                }
+            });
 
-        //TODO check to make sure the edit's are legal before changing back to profile
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                attemptEditProfile(user, userTable);
-            }
-        });
+
+            user = userTable.getUserById(acct.getIdToken());
+            attemptEditProfile(user, userTable);
+
+            //TODO check to make sure the edit's are legal before changing back to profile
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    attemptEditProfile(user, userTable);
+                }
+            });
+        }
     }
+
+    private void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.hide();
+        }
+    }
+
 
     private void attemptEditProfile(UserClass user, UserTableHandler userTable) {
 
@@ -92,5 +145,12 @@ public class EditProfileActivity extends AppCompatActivity {
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
         return email.contains("@");
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+        // be available.
+        Log.d("EditProfileActivity", "onConnectionFailed:" + connectionResult);
     }
 }
