@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -13,6 +15,9 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import android.database.Cursor;
+
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -22,10 +27,13 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
-
-public class ProfileActivity extends AppCompatActivity{
+public class ProfileActivity extends AppCompatActivity {
     private ListView profileListView ;
     private ArrayAdapter<String> listAdapter ;
     private TextView profileEmailView;
@@ -36,9 +44,6 @@ public class ProfileActivity extends AppCompatActivity{
     private GoogleSignInResult result;
     private GoogleSignInAccount acct;
     private GoogleApiClient mGoogleAPIClient;
-    private EventTableHandler eventTable;
-    private UserTableHandler userTable;
-    private UserClass user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,26 +54,40 @@ public class ProfileActivity extends AppCompatActivity{
         //Load Username, Email, Name from SQL database
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
-        profileListView = (ListView) findViewById( R.id.forumListView);
+        profileListView = (ExpandableListView) findViewById( R.id.forumListView);
         profileEmailView = (TextView) findViewById( R.id.email);
         profileUsernameView = (TextView) findViewById( R.id.username);
         profileImageView = (ImageView) findViewById( R.id.userphoto);
         button = (Button) findViewById( R.id.edit_profile);
-        userTable = new UserTableHandler();
-        eventTable = new EventTableHandler();
 
-        GoogleApiClient mGoogleAPIClient = LoginActivity.getApiClient();
-        GoogleSignInAccount acct = LoginActivity.getSignInResult().getSignInAccount();
+        //Access google signin
 
-        user = userTable.getUserById(acct.getIdToken());
+        /*
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
+                .requestEmail()
+                .build();
 
-        // Create ArrayAdapter using the event list.
-        listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, getEventList(user, eventTable));
+        mGoogleAPIClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        signIn();
+        */
+
+        mGoogleAPIClient = LoginActivity.getApiClient();
+        acct = LoginActivity.getSignInResult().getSignInAccount();
+
+
+        Cursor res = db.rawQuery("SELECT * FROM users WHERE id="+acct.getIdToken()+"", null);
+
+        // Create ArrayAdapter usig the event list.
+        listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, getEventList(db, res));
 
         // Set each of the the ArrayAdapters as the ListView's adapter
         profileListView.setAdapter( listAdapter );
-        profileEmailView.setText(user.getEmail());
-        profileUsernameView.setText(user.getUserID());
+        profileEmailView.setText(res.getString(res.getColumnIndex("email")));
+        profileUsernameView.setText(res.getString(res.getColumnIndex("name")));
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,11 +98,26 @@ public class ProfileActivity extends AppCompatActivity{
         //profileImageView.setImageResource();
     }
 
-    public ArrayList<String> getEventList(UserClass user, EventTableHandler eventTable) {
-        ArrayList<String> eventList = new ArrayList<String>();
-        for (int i = 0; i<user.getArrayListEvents().size(); i++) {
-            eventList.add(eventTable.getEventById(user.getArrayListEvents().get(i)).getTitle());
+    public ArrayList getEventList(SQLiteDatabase db, Cursor UserCursor) {
+        ArrayList<HashMap<String, String>> eventList = new ArrayList<HashMap<String, String>>();
+        Cursor EventCursor = db.rawQuery("SELECT * FROM events WHERE id="+UserCursor.getColumnIndex("myEvents")+"", null);
+        if (EventCursor.moveToFirst()) {
+            do {
+                HashMap<String, String> events = new HashMap<String, String>();
+                events.put("title", EventCursor.getString(EventCursor.getColumnIndex("title")));
+                events.put("location", EventCursor.getString(EventCursor.getColumnIndex("title")));
+                events.put("description", EventCursor.getString(EventCursor.getColumnIndex("description")));
+                events.put("time", EventCursor.getString(EventCursor.getColumnIndex("time")));
+                events.put("user", EventCursor.getString(EventCursor.getColumnIndex("user")));
+                eventList.add(events);
+            }
+            while (EventCursor.moveToNext());
         }
         return eventList;
+    }
+
+    public void toForum(View view) {
+        Intent intent = new Intent(this, Forum.class);
+        startActivity(intent);
     }
 }
