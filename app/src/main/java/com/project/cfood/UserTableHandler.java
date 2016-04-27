@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -118,13 +119,16 @@ public class UserTableHandler {
 
         if (cursor.moveToFirst()) {
             do {
-                user.setUserID(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_USERUSER)));
+                Log.d("Inside of cursor: ", "Working with a user");
+
+                user.setUserID(cursor.getString(0));
                 user.setName(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_NAME)));
                 user.setEmail(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_EMAIL)));
                 user.setLocation(cursor.getString(cursor.getColumnIndex(DBCreator.KEY_LOCATION)));
 
                 String s = cursor.getString(cursor.getColumnIndex(DBCreator.KEY_MYEVENTID));
                 ArrayList<String> myList = new ArrayList<String>(Arrays.asList(s.split(",")));
+
                 user.setMyEvents(myList);
 
             } while (cursor.moveToNext());
