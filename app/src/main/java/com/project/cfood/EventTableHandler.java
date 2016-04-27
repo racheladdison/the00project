@@ -76,7 +76,7 @@ public class EventTableHandler {
         String selectQuery =  "SELECT  " +
                 DBCreator.KEY_EVENTID + "," +
                 DBCreator.KEY_TITLE + "," +
-                DBCreator.KEY_DESCR + "," +
+                DBCreator.KEY_DESCR +"," +
                 DBCreator.KEY_ADDRESS + "," +
                 DBCreator.KEY_TIME + "," +
                 DBCreator.KEY_EVENTUSER + "," +

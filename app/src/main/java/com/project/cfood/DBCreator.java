@@ -3,6 +3,7 @@ package com.project.cfood;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by Austin Holler on 4/23/2016.
@@ -10,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBCreator extends SQLiteOpenHelper {
 
     // Database Version
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
     // Database Name
     public static final String DATABASE_NAME = "cFoodInfo.db";
 
@@ -41,18 +42,20 @@ public class DBCreator extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + "("
-                + KEY_USERUSER + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-                + KEY_EMAIL + "TEXT" + KEY_LOCATION + " TEXT" + KEY_MYEVENTID
-                + "TEXT" + ")";
+        String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + "( "
+                + KEY_USERUSER + " TEXT PRIMARY KEY, " + KEY_NAME + " TEXT, "
+                + KEY_EMAIL + " TEXT, " + KEY_LOCATION + " TEXT, " + KEY_MYEVENTID
+                + " TEXT " + ")";
         db.execSQL(CREATE_USERS_TABLE);
 
-        String CREATE_EVENTS_TABLE = "CREATE TABLE " + TABLE_EVENTS + "("
-                + KEY_EVENTID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT,"
-                + KEY_DESCR + "TEXT" + KEY_ADDRESS + " TEXT" + KEY_TIME
-                + "TEXT" + KEY_EVENTUSER + "INTEGER" + KEY_REPORTED + "INTEGER"
-                + KEY_ACTIVE + "INTEGER" + KEY_UPVOTES + "INTEGER" + ")";
+        String CREATE_EVENTS_TABLE = "CREATE TABLE " + TABLE_EVENTS + "( "
+                + KEY_EVENTID + " TEXT PRIMARY KEY, " + KEY_TITLE + " TEXT, "
+                + KEY_DESCR + " TEXT, " + KEY_ADDRESS + " TEXT, " + KEY_TIME
+                + " TEXT, " + KEY_EVENTUSER + " INTEGER, " + KEY_REPORTED + " INTEGER, "
+                + KEY_ACTIVE + " INTEGER, " + KEY_UPVOTES + " INTEGER " + ")";
         db.execSQL(CREATE_EVENTS_TABLE);
+
+
 
     }
 
