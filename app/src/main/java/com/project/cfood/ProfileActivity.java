@@ -73,6 +73,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(new Scope(Scopes.PLUS_LOGIN))
                 .requestId()
+                .requestProfile()
                 .build();
         GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
@@ -217,15 +218,16 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         userTable.deleteTable();
 
         user.setUserID("7shensy675walmc24");
-        user.setName("Jesus");
+        user.setName("Dylan Shepard");
         user.setLocation("Boulder, CO");
-        user.setEmail("jesus_lives@aol.com");
+        user.setEmail("additionalsupplydepot@gmail.com");
         user.setReputation(777);
 
         ArrayList<String> myEventsArray = new ArrayList<>();
         myEventsArray.add("1a85shyx");
         myEventsArray.add("37shfoe3");
         myEventsArray.add("ax874yte");
+        myEventsArray.add("breakfast");
 
         Log.d("myEventsArray Size", Integer.toString(myEventsArray.size()));
 

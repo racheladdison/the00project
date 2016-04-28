@@ -198,6 +198,22 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
 
         eventTable.deleteTable();
 
+        event.setEventID("blank1");
+        event.setTitle("");
+        event.setDescr("");
+        event.setAddress("");
+        event.setTime("");
+        event.setUserID("");
+        event.setReportedCount(0);
+        event.setActive(1);
+        event.setUpVotes(1);
+
+        eventTable.insertEvent(event);
+
+        event.setEventID("blank2");
+
+        eventTable.insertEvent(event);
+
         event.setEventID("1a85shyx");
         event.setTitle("Jesus & Chips @ 4pm UMC");
         event.setDescr("Come hang out with our main man Jesus today at the UCB on campus! " +
@@ -230,6 +246,17 @@ public class Forum extends AppCompatActivity implements NavigationView.OnNavigat
         event.setDescr("Hands down this is the event you've been waiting for! Some other event to go to?" +
                         " Skip it, you won't ever get this chance again! Who could really be better...?");
         event.setTime("April 27, 2016");
+        event.setUserID("jd9hdfa47923jsdfh");
+        event.setReportedCount(0);
+        event.setActive(1);
+        event.setUpVotes(1);
+
+        eventTable.insertEvent(event);
+
+        event.setEventID("breakfast");
+        event.setTitle("Senior Breakfast @ 9-11AM Engineering Center");
+        event.setDescr("Seniors! Come for your final college breakfast!");
+        event.setTime("April 29, 2016");
         event.setUserID("jd9hdfa47923jsdfh");
         event.setReportedCount(0);
         event.setActive(1);
